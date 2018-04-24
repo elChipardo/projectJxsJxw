@@ -13,8 +13,4 @@ export class IdentificationComponent implements OnInit {
 	ngOnInit() {
 	}
 
-	GoExplorer = function () {
-		this.router.navigateByUrl('explorer');
-	};
-
 }
