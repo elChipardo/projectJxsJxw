@@ -1,8 +1,8 @@
 # ProjectJxsJxw
-Bienvenue à tous sur ce super projet ! 
-Réalisé par Victor Melin, Sophy Brunoy, Hugues Connan et Solenn Keroullas.
+Welcome ! 
+Created by Victor Melin, Sophy Brunoy, Hugues Connan and Solenn Keroullas.
 
-## Serveur Doc _ Run it first before client
+## Serveur Doc _ Run it first before client (in server folder)
 Log in
 ```
 http://localhost:8080/ServeurDrive/Google/Oauth
@@ -17,10 +17,10 @@ http://localhost:8080/ServeurDrive/DropBox/Files
 
 Launch server
 ```
-Se placer dans le dossier Serveur – mvn clean install – mvn exec:java
+mvn clean install – mvn exec:java
 ```
 
-## Client Doc
+## Client Doc (in client folder)
 Update client
 ```
 npm install
