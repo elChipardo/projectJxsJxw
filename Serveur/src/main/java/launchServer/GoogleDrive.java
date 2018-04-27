@@ -107,8 +107,6 @@ public class GoogleDrive  {
         String fileID = "1L6s_6soghMDimTcEJ-fy6ixyfrHCnB0c15Q8B-abZZE";
         String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
 
-        System.out.println("coucuo");
-
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         properties.put("Host", "www.googleapis.com");
