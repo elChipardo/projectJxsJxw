@@ -24,10 +24,22 @@ public class DropBox {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public String getAuthentification(){
+    public String afficher(){
+        return "<a href=http://localhost:8080/ServeurDrive/DropBox/Oauth" +">"+"click ici pour s'authentifier"+"</a>" +"<br>"+ "<a href=http://localhost:8080/ServeurDrive/DropBox/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>";
+
+
+    }
+
+    @Path("/Oauth")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response getAuthentification() throws URISyntaxException, IOException{
 
         String url = "https://www.dropbox.com/oauth2/authorize?response_type=code&client_id="+AppKey+"&redirect_uri=http://localhost:8080/ServeurDrive/DropBox/Response";
-        return "<a href=" + url + ">"+"click ici pour s'authentifier"+"</a>" +"<br>"+ "<a href=http://localhost:8080/ServeurDrive/DropBox/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>";
+
+        java.net.URI location = new java.net.URI(url);
+        return Response.temporaryRedirect(location).build();
+
 
     }
 

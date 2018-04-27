@@ -21,15 +21,24 @@ public class GoogleDrive  {
     private static String access_token;
     private static String clientID = "1052251515610-a6n80d93kvrffileji09br2ksbnvdoj3.apps.googleusercontent.com";
 
-
     @GET
     @Produces(MediaType.TEXT_HTML)
-public String getAuthentification(){
+    public String afficher(){
+        return "<a href=http://localhost:8080/ServeurDrive/Google/Oauth"+">"+"click ici pour s'authentifier"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/Google/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>";
+
+
+    }
+
+    @Path("/Oauth")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+public Response getAuthentification() throws URISyntaxException, IOException{
 
 
         String url = "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&redirect_uri=http://localhost:8080/ServeurDrive/Google/Response&response_type=code&client_id="+clientID;
 
-    return "<a href=" + url + ">"+"click ici pour s'authentifier"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/Google/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>";
+        java.net.URI location = new java.net.URI(url);
+        return Response.temporaryRedirect(location).build();
 }
 
 
