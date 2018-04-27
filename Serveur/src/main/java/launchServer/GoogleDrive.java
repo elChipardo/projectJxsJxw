@@ -3,10 +3,7 @@ package launchServer;
 
 import org.json.JSONObject;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -24,7 +21,8 @@ public class GoogleDrive  {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String afficher(){
-        return "<a href=http://localhost:8080/ServeurDrive/Google/Oauth"+">"+"click ici pour s'authentifier"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/Google/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>";
+        return "<a href=http://localhost:8080/ServeurDrive/Google/Oauth"+">"+"click ici pour s'authentifier"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/Google/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/Google/Delete" + ">" + "supprimer un fichier" + "</a>" ;
 
 
     }
@@ -32,18 +30,18 @@ public class GoogleDrive  {
     @Path("/Oauth")
     @GET
     @Produces(MediaType.TEXT_HTML)
-public Response getAuthentification() throws URISyntaxException, IOException{
+    public Response getAuthentification() throws URISyntaxException, IOException{
 
 
         String url = "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&redirect_uri=http://localhost:8080/ServeurDrive/Google/Response&response_type=code&client_id="+clientID;
 
         java.net.URI location = new java.net.URI(url);
         return Response.temporaryRedirect(location).build();
-}
+    }
 
 
     @Path("/Response")
-    @GET
+    @GET //A changer en POST
     public Response getResponse(@QueryParam("code") String codeURL) throws URISyntaxException, IOException {
 
         String code = codeURL;
@@ -75,9 +73,9 @@ public Response getAuthentification() throws URISyntaxException, IOException{
 
 }
 
-@Path("/Files")
-@GET
-@Produces(MediaType.TEXT_HTML)
+    @Path("/Files")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
     public String getFiles() throws IOException {
 
 
@@ -96,42 +94,31 @@ public Response getAuthentification() throws URISyntaxException, IOException{
 
     return "<p> "+ response + "</p>";
 
-    /**
-    String url = "https://www.googleapis.com/drive/v2/files";
 
-    URL obj = new URL(url);
-    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-    // optional default is GET
-    con.setRequestMethod("GET");
-
-    //add request header
-    con.setRequestProperty("Host", "www.googleapis.com");
-    con.setRequestProperty("Authorization", "Bearer " + this.access_token);
-
-
-
-    int responseCode = con.getResponseCode();
-    System.out.println("\nSending 'GET' request to URL : " + url);
-    System.out.println("Response Code : " + responseCode);
-
-    BufferedReader in = new BufferedReader(
-            new InputStreamReader(con.getInputStream()));
-    String inputLine;
-    StringBuffer response = new StringBuffer();
-
-    while ((inputLine = in.readLine()) != null) {
-        response.append(inputLine);
-    }
-    in.close();
-
-    //print result
-
-    return "<p> "+ response.toString() + "</p>";
-     */
 
 }
 
+    @Path("/Delete")
+    @GET //A changer en DELETE
+    @Produces(MediaType.TEXT_HTML)
+    public String deleteFile() throws IOException {
+
+
+        String fileID = "1L6s_6soghMDimTcEJ-fy6ixyfrHCnB0c15Q8B-abZZE";
+        String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
+
+        System.out.println("coucuo");
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Host", "www.googleapis.com");
+        properties.put("Authorization", "Bearer " + this.access_token);
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "DELETE", "", properties);
+
+        return "<p>" + response + "</p>";
+    }
 
 
 

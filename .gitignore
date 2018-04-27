@@ -1,2 +1,5 @@
 # dependencies
 /Client/node_modules
+#Serveur
+/Serveur/*.idea
+/Serveur/target*
