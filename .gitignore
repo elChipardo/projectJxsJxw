@@ -1,2 +1,4 @@
 # dependencies
 /Client/node_modules
+#Serveur
+*.idea
