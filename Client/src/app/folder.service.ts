@@ -8,13 +8,14 @@ import 'rxjs/add/operator/map';
 export class FolderService {
 
 	//getting adresse
-	private baseUrl = 'http://localhost:8080/';
-	
+	private baseUrl = 'http://localhost:4200/';
+	//private baseUrl:string= "../assets/files.json";
 	constructor(private http: HttpClient) { }
 
 	//------- GETTING DATA -------
 	getAllJSON(): Observable<any> {
-		return this.http.get(this.baseUrl);
+		//return this.http.get<any>(this.baseUrl + "ServeurDrive/Google/Files").subscribe((res) => {
+			return this.http.get<any(this.baseUrl+ "ServeurDrive/Google/Files");
 	}
 
 	getFolderJSON(name: string): Observable<any> {

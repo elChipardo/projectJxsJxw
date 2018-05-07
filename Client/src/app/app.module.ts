@@ -5,6 +5,9 @@ import { AppComponent } from './app.component';
 import { IdentificationComponent } from './identification/identification.component';
 import { ExplorerComponent } from './explorer/explorer.component';
 import { CreateaccountComponent } from './createaccount/createaccount.component';
+import { FolderService } from './folder.service';
+import { HttpClientModule } from '@angular/common/http';
+
 
 const appRoutes: Routes = [
   { path : '', component : IdentificationComponent},
@@ -25,9 +28,10 @@ const appRoutes: Routes = [
 	RouterModule.forRoot(
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only
-    )
+    ),
+      HttpClientModule
   ],
-  providers: [],
+  providers: [FolderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

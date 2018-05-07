@@ -17,8 +17,14 @@
   <section>
     <article>
       <h1>
-        Welcome to {{ title }}, my new perroquet !
+        Liste des fichiers
       </h1>
+      
+      <p *ngFor="let fold of listFolder">
+       {{fold.nom}}
+       {{fold.plateforme}}
+      </p>
+    
     </article>
     <aside>
       <p>Espace libre :</p>
