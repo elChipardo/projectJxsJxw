@@ -1,6 +1,8 @@
 package launchServer;
 
 
+import Files.TreatementFiles;
+import HttpRequest.Request;
 import org.json.JSONObject;
 
 import javax.ws.rs.*;
@@ -75,7 +77,6 @@ public class GoogleDrive  {
 
     @Path("/Files")
     @GET
-    @Produces(MediaType.TEXT_HTML)
     public String getFiles() throws IOException {
 
 
@@ -87,12 +88,23 @@ public class GoogleDrive  {
     properties.put("Host", "www.googleapis.com");
     properties.put("Authorization", "Bearer " + this.access_token);
 
+   // maximum fichiers String urlParameters = "maxResults=1000";
+
     // on execute la requête
     String response = HttpRequest.Request.setRequest(url,"GET","", properties);
 
+
+    try {
+        TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile));
+    }
+    catch ( Exception e){
+        System.out.println(e);
+    }
+
+
     //print result
 
-    return "<p> "+ response + "</p>";
+    return TreatementFiles.generateJSONFiles().toString();
 
 
 

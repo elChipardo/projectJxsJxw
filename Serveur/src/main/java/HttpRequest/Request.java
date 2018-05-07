@@ -13,6 +13,8 @@ import java.util.Set;
 
 public class Request {
 
+    public static String requestFile;
+
 
 
     public static String setRequest(String url, String typeRequest, String urlParameters, HashMap<String, String> properties) throws IOException {
@@ -55,10 +57,13 @@ public class Request {
         String inputLine;
         StringBuffer response = new StringBuffer();
 
+
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
         in.close();
+
+        requestFile=response.toString();
 
         return response.toString();
 
