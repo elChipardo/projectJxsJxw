@@ -15,15 +15,15 @@ export class FolderService {
 	//------- GETTING DATA -------
 	getAllJSON(): Observable<any> {
 		//return this.http.get<any>(this.baseUrl + "ServeurDrive/Google/Files").subscribe((res) => {
-			return this.http.get<any(this.baseUrl+ "ServeurDrive/Google/Files");
+			return this.http.get<any>(this.baseUrl+ "ServeurDrive/Google/Files");
 	}
 
 	getFolderJSON(name: string): Observable<any> {
 		return this.http.get(this.baseUrl+"/"+name);
 	}
-	
+
 	//get file ? url/nameFolder/nameFile
-	
+
 	//------- POST DATA -------
 	//define url format
 	//data = folder or file
@@ -39,12 +39,12 @@ export class FolderService {
 		let body = JSON.stringify(data);
 		return this.http.put(url+"/rename/"+data.name+"?new=/"+ nameString, data);
 	}
-	
+
 	updateMoveData(urlOld: string, newUrl: string, data){
 		let body = JSON.stringify(data);
 		return this.http.put(urlOld+"/move/"+data.name+"?new=/"+ newUrl, data);
 	}
-	
+
 	//------- DELETE DATA -------
 	//remove data
 	deleteData(url: string, name: string){

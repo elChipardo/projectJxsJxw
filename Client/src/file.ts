@@ -1,12 +1,11 @@
-export class File {
- nomFichier: string;
- taille: number;
- dateModif: string;
+import { Parent } from './parent';
+export class File extends Parent{
+  	type: string;
 
-constructor(name:string, size:number, date:string){
-  this.nomFichier=name;
-  this.taille=size;
-  this.dateModif=date;
+
+constructor(name:string, plateform:string, date:string){
+  super(name, plateform,date);
+ 	this.type="dossier";
 }
  // liste de fichier à terme
 }

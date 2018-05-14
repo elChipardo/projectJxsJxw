@@ -1,13 +1,13 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <header>
-    <p>Bienvenue sur la plateforme de fichiers partagés 
+    <p>Bienvenue sur la plateforme de fichiers partagés
     </p>
     <nav>
       <p>
         <label for="fileSearch"> Recherche :</label>
         <input type="search" name="fileSearch" id="fileSearch" placeholder="nom du fichier" size="50">
-       
+
       </p>
     </nav>
   </header>
@@ -19,20 +19,29 @@
       <h1>
         Liste des fichiers
       </h1>
-      
-      <p *ngFor="let fold of listFolder">
-       {{fold.nom}}
-       {{fold.plateforme}}
-      </p>
-    
+      <table>
+        <tr>
+          <th>Nom </th>
+          <th>Plateforme</th>
+          <th>Date modif</th>
+        </tr>
+
+
+<tbody>
+        <tr *ngFor="let fold of listFolder">
+          <td>{{fold.nom}}</td>
+          <td>{{fold.plateforme}}</td>
+          <td>{{fold.dateModif}}</td>
+        </tr>
+</tbody>
+      </table>
+
+
     </article>
     <aside>
       <p>Espace libre :</p>
     </aside>
   </section>
- 
+
 
 </div>
-
-
-
