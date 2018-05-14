@@ -1,11 +1,11 @@
 export class Folder {
 	nom: string;
  	plateforme: string;
- 	files: string[];
+ 	dateModif: string;
 // liste de fichier à terme
- constructor(name: string, plat: string, fichiers:string[]){
+ constructor(name: string, plat: string, dateMod:string){
  	this.nom=name;
  	this.plateforme=plat;
- 	this.files=fichiers;
+ 	this.dateModif=dateMod;
  }
 }

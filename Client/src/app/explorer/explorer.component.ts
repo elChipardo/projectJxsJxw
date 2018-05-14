@@ -17,14 +17,17 @@ export class ExplorerComponent implements OnInit {
 	
 	ngOnInit(){
    	this.apiService.getAllJSON().subscribe(res => {
-   		var rootFolder = new Array<Folder>();
+   		var rootFolder = new Array<Object>();
    		this.blop=res.items;
 
    		console.log(this.blop);
 
 		for(let file in this.blop){
+			if(this.blop[file].type ="dossier"){
 			rootFolder.push(new Folder(this.blop[file].title,this.blop[file].plateforme,[]));
-		
+			}else{
+				rootFolder.push(new File())
+			}
 		}
 		this.listFolder=rootFolder;
 
