@@ -14,8 +14,8 @@ export class FolderService {
 
 	//------- GETTING DATA -------
 	getAllJSON(): Observable<any> {
-		//return this.http.get<any>(this.baseUrl + "ServeurDrive/Google/Files").subscribe((res) => {
-			return this.http.get<any>(this.baseUrl+ "ServeurDrive/Google/Files");
+		//return this.http.get<any>(this.baseUrl + "ServeurDrive/Files").subscribe((res) => {
+			return this.http.get<any>(this.baseUrl+ "ServeurDrive/Files");
 	}
 
 	getFolderJSON(name: string): Observable<any> {
