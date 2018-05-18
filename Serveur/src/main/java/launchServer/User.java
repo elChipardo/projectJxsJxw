@@ -35,10 +35,10 @@ public class User {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String afficher(){
-        return "<a href=http://localhost:8080/ServeurDrive/User/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
-                "<a href=http://localhost:8080/ServeurDrive/User/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/User/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/User/RenameDrive" + ">" + "renommer fichier"  +"</a>" + "<br>";
+        return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
+                "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/RenameDrive" + ">" + "renommer fichier"  +"</a>" + "<br>";
 
     }
 
@@ -78,7 +78,7 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive");
+        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -119,7 +119,7 @@ public class User {
         this.access_tokenDrop = myResponse.getString("access_token");
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive");
+        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
         return Response.temporaryRedirect(location).build();
 
     }
