@@ -38,7 +38,7 @@ public class User {
         return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/RenameDrive" + ">" + "renommer fichier"  +"</a>" + "<br>";
+                "<a href=http://localhost:8080/ServeurDrive/RenameDrive + ">" + "renommer fichier"  +"</a>" + "<br>";
 
     }
 
@@ -78,7 +78,8 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        //java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -167,13 +168,12 @@ public class User {
     @Path("/RenameDrive")
     @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
-    public String renameFile() throws IOException {
-
-        System.out.println("yeeeah");
-
-        String fileId = "1KJbMVyGmFykfxllgDqqzg5sV0XWyEBOsKtCwRQhn4RI";
+    public String renameFile (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String titleParam) throws IOException {
+        
+        //String fileId = "1KJbMVyGmFykfxllgDqqzg5sV0XWyEBOsKtCwRQhn4RI";
+        String fileId = fileIdParam;
         String url = "https://www.googleapis.com/drive/v2/files/" + fileId;
-        String titler = "bonjou";
+        String titler = titleParam;
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         properties.put("Host", "www.googleapis.com");
@@ -182,10 +182,8 @@ public class User {
         properties.put("Content-Type", "application/json");
 
         // on execute la requête
-        String response = HttpRequest.Request.setRequest(url, "PUT", "{ \"title\" : \"bonjouuuu\" }", properties);
+        String response = HttpRequest.Request.setRequest(url, "PUT", "{ \"title\" : \"" + titleParam + "\" }", properties);
 
-
-        System.out.println("coucou"+response);
         return "<p>" + response + "</p>";
         
 }
