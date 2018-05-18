@@ -266,7 +266,7 @@ public class User {
     @Path("/RenameDropBox")
     @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
-    public String renameFileDropBox (@QueryParam("fileId") String fileIdParam, @QueryParam("newTitle") String newTitleParam) throws IOException {
+    public String renameFileDropBox (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String newTitleParam) throws IOException {
 
         String fileId = fileIdParam;
         String url = "https://api.dropboxapi.com/2/files/move_v2";
