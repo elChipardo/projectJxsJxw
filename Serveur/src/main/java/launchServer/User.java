@@ -38,7 +38,7 @@ public class User {
         return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/RenameDrive + ">" + "renommer fichier"  +"</a>" + "<br>";
+                "<a href=http://localhost:8080/ServeurDrive/RenameDrive" + ">" + "renommer fichier"  +"</a>" + "<br>";
 
     }
 
@@ -78,8 +78,8 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        //java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
+        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        //java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
