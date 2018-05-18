@@ -38,7 +38,7 @@ public class User {
         return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/RenameDrive?fileId=kdsg&title=labiteADudule+ ">" + "renommer fichier"  +"</a>" + "<br>";
+                "<a href=http://localhost:8080/ServeurDrive/RenameGoogleDrive?fileId=kdsg&title=labiteADudule+ ">" + "renommer fichier"  +"</a>" + "<br>";
 
     }
 
@@ -146,7 +146,7 @@ public class User {
 
     }
 
-    @Path("/DeleteDrive")
+    @Path("/DeleteGoogleDrive")
     @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
     public String deleteFileGoogle(@QueryParam("fileId") String fileIdParam) throws IOException {
@@ -165,7 +165,7 @@ public class User {
         return "<p>" + response + "</p>";
     }
 
-    @Path("/RenameDrive")
+    @Path("/RenameGoogleDrive")
     @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
     public String renameFile (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String titleParam) throws IOException {
@@ -238,7 +238,7 @@ public class User {
     }
 
 
-    @Path("/UploadDrive")
+    @Path("/UploadGoogleDrive")
     @GET //A changer en POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.TEXT_HTML)
