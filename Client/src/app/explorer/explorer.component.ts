@@ -42,4 +42,21 @@ export class ExplorerComponent implements OnInit {
       console.log(folderList);
    });*/
 	}
+	suppr(){
+		console.log('on supprime')
+		if (confirm("êtes vous sur de vouloir supprimer le fichier")) { 
+        alert("vous êtes d'accord")
+        //supprimer le fichier selectionné
+    }else{
+        alert("vous n'êtes pas d'accord")
+        //ne rien faire 
+    }	
+	}
+
+
+	 renommer(){
+	 	console.log('on renomme')
+    var newName=prompt('Indiquez ici le nouveau nom de fichier');
+    //faire un appel au changement de nom
+}
 }
