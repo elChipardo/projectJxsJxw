@@ -1,6 +1,5 @@
 package Files;
 
-import jdk.internal.cmm.SystemResourcePressureImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,8 +19,6 @@ public class TreatementFiles {
 
     public static void treatFilesGoogle(JSONObject files){
 
-
-        System.out.println(files);
         JSONArray listfiles = files.getJSONArray("items");
         System.out.println("taille :"+listfiles.length());
         for (int i=0; i< listfiles.length();i++){
@@ -31,11 +28,11 @@ public class TreatementFiles {
             // fonctionne pas : String sharePerson = listfiles.getJSONObject(i).getJSONObject("sharingUser").getString("displayName");
             String date = listfiles.getJSONObject(i).getString("modifiedDate");
 
-            String type = "fichier";
+            String type = "file";
             // detection des dossiers
             if (listfiles.getJSONObject(i).getString("mimeType").equals("application/vnd.google-apps.folder")){
                 System.out.println("dossier " + name);
-                type = "dossier";
+                type = "folder";
                 //foldersId.add(id);
             }
             File newFile = new File(name,id, "GoogleDrive","",date, type);
@@ -53,6 +50,28 @@ public class TreatementFiles {
 
     }
 
+    public static void treatFilesDropBox(JSONObject files) {
+
+        JSONArray listfiles = files.getJSONArray("entries");
+
+
+        for (int i = 0; i < listfiles.length(); i++) {
+            String id = listfiles.getJSONObject(i).getString("id");
+
+            String name = listfiles.getJSONObject(i).getString("name");
+            // fonctionne pas : String sharePerson = listfiles.getJSONObject(i).getJSONObject("sharingUser").getString("displayName");
+            //String date = listfiles.getJSONObject(i).getString("modifiedDate");
+
+            String type = listfiles.getJSONObject(i).getString(".tag");
+            File newFile = new File(name, id, "DropBox", "", "", type);
+
+
+            listeFiles.add(newFile);
+
+
+        }
+    }
+
     public static JSONObject generateJSONFiles(){
 
         JSONObject json = new JSONObject();
@@ -62,9 +81,11 @@ public class TreatementFiles {
         for (int i=0; i<listeFiles.size();i++){
             JSONObject item = new JSONObject();
             item.put("title", listeFiles.get(i).nameFile);
+            item.put("id", listeFiles.get(i).idFile);
             item.put("type", listeFiles.get(i).type);
             item.put("plateforme", listeFiles.get(i).namePlateforme);
             item.put("dateModif", listeFiles.get(i).dateModif);
+
 
             array.put(item);
         }
