@@ -38,7 +38,7 @@ public class User {
         return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/RenameGoogleDrive?fileId=kdsg&title=labiteADudule+ ">" + "renommer fichier"  +"</a>" + "<br>";
+                "<a href=http://localhost:8080/ServeurDrive/RenameGoogleDrive?fileId=kdsg&title=labiteADudule"+ ">" + "renommer fichier"  +"</a>" + "<br>";
 
     }
 
@@ -237,31 +237,6 @@ public class User {
 
     }
 
-
-    @Path("/UploadGoogleDrive")
-    @GET //A changer en POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.TEXT_HTML)
-    public String uploadFile() throws IOException {
-
-        String url = "https://www.googleapis.com/drive/v2/files?uploadType=media";
-
-        File fileToInsert = new File("/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/project.pdf");
-        long size = fileToInsert.length();
-
-        JSONObject file = JSON.parse(fileToInsert);
-        
-        properties.put("Host", "www.googleapis.com");
-        properties.put("Content-Type", "application/pdf");
-        properties.put("Content-Length", String.valueOf(size));
-        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
-
-        // on execute la requête
-        String response = HttpRequest.Request.setRequest(url, "POST", "file:///home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/project.pdf", properties);
-
-        return "<p>" + response + "</p>";
-    }
-        
         
     @Path("/RenameDropBox")
     @GET //A changer en PUT
@@ -289,6 +264,7 @@ public class User {
 
         // fin requete annexe
 
+        HashMap<String, String> properties = new HashMap<>();
         properties.put("Authorization", "Bearer " + this.access_tokenDrop);
         properties.put("Content-Type", "application/json");
 
@@ -300,6 +276,7 @@ public class User {
         return "<p>" + response + "</p>";
 
     }
+
 
 
 }
