@@ -53,6 +53,8 @@ public class DropBox {
         // on execute la requete
         String response = HttpRequest.Request.setRequest(url,"POST",urlParameters, properties);
 
+        System.out.println(response);
+
         try {
             TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
         }
@@ -67,4 +69,6 @@ public class DropBox {
 
 
     }
+
+
 }

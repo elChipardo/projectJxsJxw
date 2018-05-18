@@ -1,11 +1,14 @@
 package launchServer;
 
 import Files.TreatementFiles;
+import HttpRequest.Request;
 import org.json.JSONObject;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
+
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -30,7 +33,7 @@ public class User {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String afficher(){
-        return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +"<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" ;
+        return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +"<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" + "<a href=http://localhost:8080/ServeurDrive/DeleteDropBox"+">"+"click ici pour supprimer fichier dropbox" ;
 
 
     }
@@ -136,6 +139,72 @@ public class User {
 
         return TreatementFiles.generateJSONFiles().toString();
 
+    }
+
+    @Path("/DeleteDrive")
+    @GET //A changer en DELETE
+    @Produces(MediaType.TEXT_HTML)
+    public String deleteFileGoogle(@QueryParam("fileId") String fileId) throws IOException {
+
+
+        String fileID = fileId;
+        String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Host", "www.googleapis.com");
+        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "DELETE", "", properties);
+
+        return "<p>" + response + "</p>";
+    }
+
+    @Path("/DeleteDropBox")
+    @GET //A changer en DELETE
+    @Produces(MediaType.TEXT_HTML)
+    public String deleteFileDropBox(@QueryParam("fileId") String fileId) throws IOException {
+
+
+        String fileID = fileId;
+
+
+
+        // requete annexe qui recupere le chemin du fichier
+        String urlRequeteannexe = "https://api.dropboxapi.com/2/files/get_metadata";
+
+        HashMap<String, String> propertiesRequeteAnnexe = new HashMap<>();
+        propertiesRequeteAnnexe.put("Content-Type", "application/json");
+        propertiesRequeteAnnexe.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+        String urlParametersrequeteAnnexe ="{\"path\": \""+fileID+"\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
+
+        String responseRequeteannexe = HttpRequest.Request.setRequest(urlRequeteannexe, "POST", urlParametersrequeteAnnexe, propertiesRequeteAnnexe);
+
+        JSONObject jsonRequeteAnnexe = new JSONObject(Request.requestFile);
+
+        String path = jsonRequeteAnnexe.getString("path_lower");
+        System.out.println(responseRequeteannexe);
+
+
+
+        String url = "https://api.dropboxapi.com/2/files/delete_v2";
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Content-Type", "application/json");
+        properties.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+
+        String urlParameters ="{\"path\": \""+path+"\"}";
+
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
+        System.out.println(response);
+
+        return "<p>" + responseRequeteannexe     + "</p>";
     }
 
 }

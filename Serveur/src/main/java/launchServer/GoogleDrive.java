@@ -37,7 +37,7 @@ public class GoogleDrive  {
     public static String getFiles(String accessT) throws IOException {
 
 
-    String url = "https://www.googleapis.com/drive/v2/files";
+    String url = "https://www.googleapis.com/drive/v2/files/";
 
 
     //les propiétés
