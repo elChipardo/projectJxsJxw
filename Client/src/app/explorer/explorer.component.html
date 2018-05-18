@@ -12,28 +12,33 @@
     </nav>
   </header>
   <div id="image_file">
-    <img src="images/password.jpg">
   </div>
   <section>
     <article>
       <h1>
         Liste des fichiers
       </h1>
-      <table>
+      <table width=100%>
         <tr>
+
+          <th> Cochage</th>
+          <th>blop</th>
           <th>Nom </th>
           <th>Plateforme</th>
           <th>Date modif</th>
         </tr>
 
 
-<tbody>
+
         <tr *ngFor="let fold of listFolder">
+          <input type="checkbox" name={{fold.nom}} />
+        <!--  <td *ngIf="fold.type = 'dossier'"> coucoub</td>-->
           <td>{{fold.nom}}</td>
           <td>{{fold.plateforme}}</td>
           <td>{{fold.dateModif}}</td>
+          <br/>
         </tr>
-</tbody>
+
       </table>
 
 

@@ -1,6 +1,7 @@
 package launchServer;
 
 import Files.TreatementFiles;
+import HttpRequest.Request;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,7 +18,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-@Path("/User")
+@Path("")
 public class User {
 
     private static String access_tokenGoogle;
@@ -37,7 +39,6 @@ public class User {
                 "<a href=http://localhost:8080/ServeurDrive/User/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/User/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/User/RenameDrive" + ">" + "renommer fichier"  +"</a>" + "<br>";
-
 
     }
 
@@ -65,7 +66,7 @@ public class User {
         properties.put("Content-Type","application/x-www-form-urlencoded");
 
         // les paramètres
-        String urlParameters = "code="+codeGoogle + "&client_id="+clientID+ "&client_secret="+clientSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/User/ResponseGoogleDrive" + "&grant_type=authorization_code";
+        String urlParameters = "code="+codeGoogle + "&client_id="+clientID+ "&client_secret="+clientSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/ResponseGoogleDrive" + "&grant_type=authorization_code";
 
         // on execute la requête
         String response = HttpRequest.Request.setRequest(url,"POST",urlParameters, properties);
@@ -77,7 +78,7 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/User");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -106,7 +107,7 @@ public class User {
         properties.put("Content-Type","application/x-www-form-urlencoded");
 
         // les paramètres
-        String urlParameters = "code="+codeDropBox + "&client_id="+AppKey+ "&client_secret="+AppSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/User/ResponseDropBox" + "&grant_type=authorization_code";
+        String urlParameters = "code="+codeDropBox + "&client_id="+AppKey+ "&client_secret="+AppSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/ResponseDropBox" + "&grant_type=authorization_code";
 
         // on execute la requête
         String response = HttpRequest.Request.setRequest(url,"POST",urlParameters, properties);
@@ -118,7 +119,7 @@ public class User {
         this.access_tokenDrop = myResponse.getString("access_token");
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/User");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -147,10 +148,9 @@ public class User {
     @Path("/DeleteDrive")
     @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
-    public String deleteFile() throws IOException {
-
-
-        String fileID = "1L6s_6soghMDimTcEJ-fy6ixyfrHCnB0c15Q8B-abZZE";
+    public String deleteFileGoogle(@QueryParam("fileId") String fileId) throws IOException {
+    	
+        String fileID = fileId;
         String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
 
         //les propiétés
@@ -163,8 +163,6 @@ public class User {
 
         return "<p>" + response + "</p>";
     }
-
-
 
     @Path("/RenameDrive")
     @GET //A changer en PUT
@@ -189,6 +187,54 @@ public class User {
 
         System.out.println("coucou"+response);
         return "<p>" + response + "</p>";
+        
+}
+
+    @Path("/DeleteDropBox")
+    @GET //A changer en DELETE
+    @Produces(MediaType.TEXT_HTML)
+    public String deleteFileDropBox(@QueryParam("fileId") String fileId) throws IOException {
+
+
+        String fileID = fileId;
+
+
+
+        // requete annexe qui recupere le chemin du fichier
+        String urlRequeteannexe = "https://api.dropboxapi.com/2/files/get_metadata";
+
+        HashMap<String, String> propertiesRequeteAnnexe = new HashMap<>();
+        propertiesRequeteAnnexe.put("Content-Type", "application/json");
+        propertiesRequeteAnnexe.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+        String urlParametersrequeteAnnexe ="{\"path\": \""+fileID+"\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
+
+        String responseRequeteannexe = HttpRequest.Request.setRequest(urlRequeteannexe, "POST", urlParametersrequeteAnnexe, propertiesRequeteAnnexe);
+
+        JSONObject jsonRequeteAnnexe = new JSONObject(Request.requestFile);
+
+        String path = jsonRequeteAnnexe.getString("path_lower");
+        System.out.println(responseRequeteannexe);
+
+
+
+        String url = "https://api.dropboxapi.com/2/files/delete_v2";
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Content-Type", "application/json");
+        properties.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+
+        String urlParameters ="{\"path\": \""+path+"\"}";
+
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
+        System.out.println(response);
+
+        return "<p>" + responseRequeteannexe     + "</p>";
+
     }
 
 }

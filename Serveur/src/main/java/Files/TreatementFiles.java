@@ -81,9 +81,11 @@ public class TreatementFiles {
         for (int i=0; i<listeFiles.size();i++){
             JSONObject item = new JSONObject();
             item.put("title", listeFiles.get(i).nameFile);
+            item.put("id", listeFiles.get(i).idFile);
             item.put("type", listeFiles.get(i).type);
             item.put("plateforme", listeFiles.get(i).namePlateforme);
             item.put("dateModif", listeFiles.get(i).dateModif);
+
 
             array.put(item);
         }
