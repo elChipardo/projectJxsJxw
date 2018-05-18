@@ -2,8 +2,7 @@ package Files;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 
 import javax.json.JsonArray;
 import java.io.FileNotFoundException;
@@ -14,10 +13,11 @@ import java.util.List;
 
 public class TreatementFiles {
 
-    static List<File> listeFiles = new ArrayList<File>();
-    static List<String> foldersId = new ArrayList<>();
+    static List<File> listeFiles;
 
     public static void treatFilesGoogle(JSONObject files){
+
+        listeFiles = new ArrayList<>();
 
         JSONArray listfiles = files.getJSONArray("items");
         System.out.println("taille :"+listfiles.length());
