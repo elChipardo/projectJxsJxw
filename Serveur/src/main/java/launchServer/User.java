@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-@Path("/User")
+@Path("")
 public class User {
 
     private static String access_tokenGoogle;
@@ -30,7 +30,7 @@ public class User {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String afficher(){
-        return "<a href=http://localhost:8080/ServeurDrive/User/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/User/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +"<a href=http://localhost:8080/ServeurDrive/User/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" ;
+        return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +"<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" ;
 
 
     }
@@ -59,7 +59,7 @@ public class User {
         properties.put("Content-Type","application/x-www-form-urlencoded");
 
         // les paramètres
-        String urlParameters = "code="+codeGoogle + "&client_id="+clientID+ "&client_secret="+clientSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/User/ResponseGoogleDrive" + "&grant_type=authorization_code";
+        String urlParameters = "code="+codeGoogle + "&client_id="+clientID+ "&client_secret="+clientSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/ResponseGoogleDrive" + "&grant_type=authorization_code";
 
         // on execute la requête
         String response = HttpRequest.Request.setRequest(url,"POST",urlParameters, properties);
@@ -71,7 +71,7 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/User");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -100,7 +100,7 @@ public class User {
         properties.put("Content-Type","application/x-www-form-urlencoded");
 
         // les paramètres
-        String urlParameters = "code="+codeDropBox + "&client_id="+AppKey+ "&client_secret="+AppSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/User/ResponseDropBox" + "&grant_type=authorization_code";
+        String urlParameters = "code="+codeDropBox + "&client_id="+AppKey+ "&client_secret="+AppSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/ResponseDropBox" + "&grant_type=authorization_code";
 
         // on execute la requête
         String response = HttpRequest.Request.setRequest(url,"POST",urlParameters, properties);
@@ -112,7 +112,7 @@ public class User {
         this.access_tokenDrop = myResponse.getString("access_token");
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/User");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive");
         return Response.temporaryRedirect(location).build();
 
     }

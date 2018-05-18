@@ -24,7 +24,7 @@ public class GoogleDrive  {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public static Response getAuthentification() throws URISyntaxException, IOException{
-        String url = "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&redirect_uri=http://localhost:8080/ServeurDrive/User/ResponseGoogleDrive&response_type=code&client_id="+clientID;
+        String url = "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&redirect_uri=http://localhost:8080/ServeurDrive/ResponseGoogleDrive&response_type=code&client_id="+clientID;
 
         java.net.URI location = new java.net.URI(url);
         return Response.temporaryRedirect(location).build();
