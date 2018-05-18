@@ -3,9 +3,12 @@ package launchServer;
 import Files.TreatementFiles;
 import org.json.JSONObject;
 
+import java.io.File;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -30,7 +33,10 @@ public class User {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String afficher(){
-        return "<a href=http://localhost:8080/ServeurDrive/User/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+ "<a href=http://localhost:8080/ServeurDrive/User/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +"<a href=http://localhost:8080/ServeurDrive/User/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" ;
+        return "<a href=http://localhost:8080/ServeurDrive/User/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
+                "<a href=http://localhost:8080/ServeurDrive/User/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/User/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/User/RenameDrive" + ">" + "renommer fichier"  +"</a>" + "<br>";
 
 
     }
@@ -136,6 +142,53 @@ public class User {
 
         return TreatementFiles.generateJSONFiles().toString();
 
+    }
+
+    @Path("/DeleteDrive")
+    @GET //A changer en DELETE
+    @Produces(MediaType.TEXT_HTML)
+    public String deleteFile() throws IOException {
+
+
+        String fileID = "1L6s_6soghMDimTcEJ-fy6ixyfrHCnB0c15Q8B-abZZE";
+        String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Host", "www.googleapis.com");
+        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "DELETE", "", properties);
+
+        return "<p>" + response + "</p>";
+    }
+
+
+
+    @Path("/RenameDrive")
+    @GET //A changer en PUT
+    @Produces(MediaType.TEXT_HTML)
+    public String renameFile() throws IOException {
+
+        System.out.println("yeeeah");
+
+        String fileId = "1KJbMVyGmFykfxllgDqqzg5sV0XWyEBOsKtCwRQhn4RI";
+        String url = "https://www.googleapis.com/drive/v2/files/" + fileId;
+        String titler = "bonjou";
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Host", "www.googleapis.com");
+        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
+        properties.put("uploadType", "multipart");
+        properties.put("Content-Type", "application/json");
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "PUT", "{ \"title\" : \"bonjouuuu\" }", properties);
+
+
+        System.out.println("coucou"+response);
+        return "<p>" + response + "</p>";
     }
 
 }
