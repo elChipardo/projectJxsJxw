@@ -212,6 +212,8 @@ public class User {
         JSONObject jsonRequeteAnnexe = new JSONObject(Request.requestFile);
 
         String path = jsonRequeteAnnexe.getString("path_lower");
+
+        // fin requete annexe
         System.out.println(responseRequeteannexe);
 
 
@@ -232,6 +234,48 @@ public class User {
         System.out.println(response);
 
         return "<p>" + responseRequeteannexe     + "</p>";
+
+    }
+
+    @Path("/RenameDropBox")
+    @GET //A changer en PUT
+    @Produces(MediaType.TEXT_HTML)
+    public String renameFileDropBox (@QueryParam("fileId") String fileIdParam, @QueryParam("newTitle") String newTitleParam) throws IOException {
+
+        String fileId = fileIdParam;
+        String url = "https://api.dropboxapi.com/2/files/move_v2";
+        String newTitle = newTitleParam;
+
+        // requete annexe qui recupere le chemin du fichier
+        String urlRequeteannexe = "https://api.dropboxapi.com/2/files/get_metadata";
+
+        HashMap<String, String> propertiesRequeteAnnexe = new HashMap<>();
+        propertiesRequeteAnnexe.put("Content-Type", "application/json");
+        propertiesRequeteAnnexe.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+        String urlParametersrequeteAnnexe ="{\"path\": \""+fileId+"\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
+
+        String responseRequeteannexe = HttpRequest.Request.setRequest(urlRequeteannexe, "POST", urlParametersrequeteAnnexe, propertiesRequeteAnnexe);
+
+        JSONObject jsonRequeteAnnexe = new JSONObject(Request.requestFile);
+
+        String path = jsonRequeteAnnexe.getString("path_lower");
+
+        // fin requete annexe
+
+
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Authorization", "Bearer " + this.access_tokenDrop);
+        properties.put("Content-Type", "application/json");
+
+        String urlParameters = "{\"from_path\": \""+path+"\",\"to_path\": \"/"+newTitle+"\",\"allow_shared_folder\": false,\"autorename\": false,\"allow_ownership_transfer\": false}";
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters,properties);
+
+        return "<p>" + response + "</p>";
 
     }
 
