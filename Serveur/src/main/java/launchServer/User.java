@@ -79,6 +79,7 @@ public class User {
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
         java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        //java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -148,9 +149,9 @@ public class User {
     @Path("/DeleteDrive")
     @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
-    public String deleteFileGoogle(@QueryParam("fileId") String fileId) throws IOException {
+    public String deleteFileGoogle(@QueryParam("fileId") String fileIdParam) throws IOException {
     	
-        String fileID = fileId;
+        String fileID = fileIdParam;
         String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
 
         //les propiétés
@@ -167,13 +168,12 @@ public class User {
     @Path("/RenameDrive")
     @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
-    public String renameFile() throws IOException {
-
-        System.out.println("yeeeah");
-
-        String fileId = "1KJbMVyGmFykfxllgDqqzg5sV0XWyEBOsKtCwRQhn4RI";
+    public String renameFile (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String titleParam) throws IOException {
+        
+        //String fileId = "1KJbMVyGmFykfxllgDqqzg5sV0XWyEBOsKtCwRQhn4RI";
+        String fileId = fileIdParam;
         String url = "https://www.googleapis.com/drive/v2/files/" + fileId;
-        String titler = "bonjou";
+        String titler = titleParam;
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         properties.put("Host", "www.googleapis.com");
@@ -182,10 +182,8 @@ public class User {
         properties.put("Content-Type", "application/json");
 
         // on execute la requête
-        String response = HttpRequest.Request.setRequest(url, "PUT", "{ \"title\" : \"bonjouuuu\" }", properties);
+        String response = HttpRequest.Request.setRequest(url, "PUT", "{ \"title\" : \"" + titleParam + "\" }", properties);
 
-
-        System.out.println("coucou"+response);
         return "<p>" + response + "</p>";
         
 }
@@ -193,10 +191,10 @@ public class User {
     @Path("/DeleteDropBox")
     @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
-    public String deleteFileDropBox(@QueryParam("fileId") String fileId) throws IOException {
+    public String deleteFileDropBox(@QueryParam("fileId") String fileIdParam) throws IOException {
 
 
-        String fileID = fileId;
+        String fileID = fileIdParam;
 
 
 
