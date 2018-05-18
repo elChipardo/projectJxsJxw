@@ -149,9 +149,9 @@ public class User {
     @Path("/DeleteDrive")
     @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
-    public String deleteFileGoogle(@QueryParam("fileId") String fileId) throws IOException {
+    public String deleteFileGoogle(@QueryParam("fileId") String fileIdParam) throws IOException {
     	
-        String fileID = fileId;
+        String fileID = fileIdParam;
         String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
 
         //les propiétés
@@ -191,10 +191,10 @@ public class User {
     @Path("/DeleteDropBox")
     @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
-    public String deleteFileDropBox(@QueryParam("fileId") String fileId) throws IOException {
+    public String deleteFileDropBox(@QueryParam("fileId") String fileIdParam) throws IOException {
 
 
-        String fileID = fileId;
+        String fileID = fileIdParam;
 
 
 
