@@ -3,9 +3,10 @@ export class File extends Parent{
   	type: string;
 
 
-constructor(name:string, plateform:string, date:string){
-  super(name, plateform,date);
- 	this.type="dossier";
+constructor(name:string, plateform:string, date:string, id:string){
+  super(id,name, plateform,date);
+  
+ 	this.type="fichier";
 }
  // liste de fichier à terme
 }

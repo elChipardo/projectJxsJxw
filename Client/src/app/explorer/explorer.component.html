@@ -66,6 +66,8 @@
       <h1>
         Liste des fichiers
       </h1>
+
+          
       <table width=100%>
         <tr>
 
@@ -79,15 +81,21 @@
 
 
         <tr *ngFor="let fold of listFolder">
-          <input type="checkbox" name={{fold.nom}} />
-        <!--  <td *ngIf="fold.type = 'dossier'"> coucoub</td>-->
+          <input type="radio" name="parent" id={{fold.id}} />
+       <!--  <td *ngIf="isFile(fold.type) "> coucoub</td>
+       div *ngIf="true; bonjour"></div>-->
+          <td></td>
           <td>{{fold.nom}}</td>
+          <!--<td><img src="/images/icone-dossier.png" alt="Photo de montagne" /></td>-->
           <td>{{fold.plateforme}}</td>
           <td>{{fold.dateModif}}</td>
           <br/>
         </tr>
 
       </table>
+
+
+
 
 
     </article>
