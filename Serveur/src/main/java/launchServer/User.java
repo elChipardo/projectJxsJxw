@@ -189,7 +189,7 @@ public class User {
 }
 
     @Path("/DeleteDropBox")
-    @GET //A changer en DELETE
+   // @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
     public String deleteFileDropBox(@QueryParam("fileId") String fileIdParam) throws IOException {
 
