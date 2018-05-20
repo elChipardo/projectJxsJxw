@@ -25,7 +25,7 @@ public class User {
     private static String access_tokenDrop;
     private static String codeGoogle;
     private static String codeDropBox;
-    private static String AppKey ="84imrzb8n7lobyz";
+    private static String AppKey = "84imrzb8n7lobyz";
     private static String AppSecret = "t7kt83ir955vgju";
     private static String clientID = "1052251515610-a6n80d93kvrffileji09br2ksbnvdoj3.apps.googleusercontent.com";
 
@@ -34,11 +34,11 @@ public class User {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public String afficher(){
-        return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
-                "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/RenameGoogleDrive?fileId=kdsg&title=labiteADudule"+ ">" + "renommer fichier"  +"</a>" + "<br>";
+    public String afficher() {
+        return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive" + ">" + "click ici pour s'authentifier à google" + "</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/OauthDropBox" + ">" + "click ici pour s'authentifier à dropbox" + "</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON" + "</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/RenameGoogleDrive?fileId=kdsg&title=labiteADudule" + ">" + "renommer fichier" + "</a>" + "<br>";
 
     }
 
@@ -61,20 +61,19 @@ public class User {
         String url = "https://www.googleapis.com/oauth2/v4/token";
 
         // les propriétés
-        HashMap<String,String> properties = new HashMap<>();
+        HashMap<String, String> properties = new HashMap<>();
         properties.put("Host", "www.googleapis.com");
-        properties.put("Content-Type","application/x-www-form-urlencoded");
+        properties.put("Content-Type", "application/x-www-form-urlencoded");
 
         // les paramètres
-        String urlParameters = "code="+codeGoogle + "&client_id="+clientID+ "&client_secret="+clientSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/ResponseGoogleDrive" + "&grant_type=authorization_code";
+        String urlParameters = "code=" + codeGoogle + "&client_id=" + clientID + "&client_secret=" + clientSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/ResponseGoogleDrive" + "&grant_type=authorization_code";
 
         // on execute la requête
-        String response = HttpRequest.Request.setRequest(url,"POST",urlParameters, properties);
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
         System.out.println(response.toString());
 
         JSONObject myResponse = new JSONObject(response.toString());
         this.access_tokenGoogle = myResponse.getString("access_token");
-
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
@@ -89,7 +88,7 @@ public class User {
     @Produces(MediaType.TEXT_HTML)
     public Response authentificationDropBox() throws IOException, URISyntaxException {
 
-            return DropBox.getAuthentification();
+        return DropBox.getAuthentification();
 
 
     }
@@ -104,14 +103,14 @@ public class User {
         String url = "https://api.dropboxapi.com/oauth2/token";
 
         // les propriétés
-        HashMap<String,String> properties = new HashMap<>();
-        properties.put("Content-Type","application/x-www-form-urlencoded");
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Content-Type", "application/x-www-form-urlencoded");
 
         // les paramètres
-        String urlParameters = "code="+codeDropBox + "&client_id="+AppKey+ "&client_secret="+AppSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/ResponseDropBox" + "&grant_type=authorization_code";
+        String urlParameters = "code=" + codeDropBox + "&client_id=" + AppKey + "&client_secret=" + AppSecret + "&redirect_uri=http://localhost:8080/ServeurDrive/ResponseDropBox" + "&grant_type=authorization_code";
 
         // on execute la requête
-        String response = HttpRequest.Request.setRequest(url,"POST",urlParameters, properties);
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
         //print result
         System.out.println(response);
 
@@ -125,8 +124,36 @@ public class User {
 
     }
 
+    @Path("/SpaceGoogleDrive")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String spaceGoogleDrive() throws IOException {
+
+        String url = "https://www.googleapis.com/drive/v2/about";
+
+        // propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Host", "www.googleapis.com");
+        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
+        System.out.println(response.toString());
+
+        JSONObject jsonInfos = new JSONObject(response.toString());
+
+        long usedSpace = jsonInfos.getLong("quotaBytesUsed");
+        long totalAllocation = jsonInfos.getLong("quotaBytesTotal");
+
+        double espaceRestant = (totalAllocation - usedSpace) * 9.31 * Math.pow(10, -10);
+
+
+        return "<p>" + "espace restant : " + espaceRestant + "Go" + "</p>";
+
+    }
+
     @Path("/SpaceDropBox")
-    @GET //A changer en DELETE
+    @GET
     @Produces(MediaType.TEXT_HTML)
     public String spaceDropBox() throws IOException {
 
@@ -141,32 +168,29 @@ public class User {
         String response = HttpRequest.Request.setRequest(url, "POST", "", properties);
 
 
-            JSONObject jsonInfos = new JSONObject(response);
-            System.out.println(jsonInfos);
-            int usedSpace = jsonInfos.getInt("used") ;
-            int totalAllocation = jsonInfos.getJSONObject("allocation").getInt("allocated");
+        JSONObject jsonInfos = new JSONObject(response);
+        int usedSpace = jsonInfos.getInt("used");
+        int totalAllocation = jsonInfos.getJSONObject("allocation").getInt("allocated");
 
-            double espaceRestant = (totalAllocation - usedSpace) *9.31*Math.pow(10,-10);
+        double espaceRestant = (totalAllocation - usedSpace) * 9.31 * Math.pow(10, -10);
 
 
-        return "<p>" + "espace restant : " + espaceRestant+  "Go"+ "</p>";
+        return "<p>" + "espace restant : " + espaceRestant + "Go" + "</p>";
     }
 
     @Path("/Files")
     @Produces(MediaType.TEXT_HTML)
     @GET
-    public String getAllFiles(){
+    public String getAllFiles() throws IOException {
 
-        try {
+        if(!access_tokenGoogle.equals("")) {
             GoogleDrive.getFiles(this.access_tokenGoogle);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
-        try {
+
+        if(!access_tokenDrop.equals("")) {
+
             DropBox.getFiles(this.access_tokenDrop);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return TreatementFiles.generateJSONFiles().toString();
@@ -174,10 +198,10 @@ public class User {
     }
 
     @Path("/DeleteGoogleDrive")
-   // @GET //A changer en DELETE
+    // @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
     public String deleteFileGoogle(@QueryParam("fileId") String fileIdParam) throws IOException {
-    	
+
         String fileID = fileIdParam;
         String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
 
@@ -193,10 +217,10 @@ public class User {
     }
 
     @Path("/RenameGoogleDrive")
-   // @GET //A changer en PUT
+    // @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
-    public String renameFile (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String titleParam) throws IOException {
-        
+    public String renameFile(@QueryParam("fileId") String fileIdParam, @QueryParam("title") String titleParam) throws IOException {
+
         //String fileId = "1KJbMVyGmFykfxllgDqqzg5sV0XWyEBOsKtCwRQhn4RI";
         String fileId = fileIdParam;
         String url = "https://www.googleapis.com/drive/v2/files/" + fileId;
@@ -212,17 +236,16 @@ public class User {
         String response = HttpRequest.Request.setRequest(url, "PUT", "{ \"title\" : \"" + titleParam + "\" }", properties);
 
         return "<p>" + response + "</p>";
-        
-}
+
+    }
 
     @Path("/DeleteDropBox")
-   // @GET //A changer en DELETE
+    // @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
     public String deleteFileDropBox(@QueryParam("fileId") String fileIdParam) throws IOException {
 
 
         String fileID = fileIdParam;
-
 
 
         // requete annexe qui recupere le chemin du fichier
@@ -232,7 +255,7 @@ public class User {
         propertiesRequeteAnnexe.put("Content-Type", "application/json");
         propertiesRequeteAnnexe.put("Authorization", "Bearer " + this.access_tokenDrop);
 
-        String urlParametersrequeteAnnexe ="{\"path\": \""+fileID+"\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
+        String urlParametersrequeteAnnexe = "{\"path\": \"" + fileID + "\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
 
         String responseRequeteannexe = HttpRequest.Request.setRequest(urlRequeteannexe, "POST", urlParametersrequeteAnnexe, propertiesRequeteAnnexe);
 
@@ -244,7 +267,6 @@ public class User {
         System.out.println(responseRequeteannexe);
 
 
-
         String url = "https://api.dropboxapi.com/2/files/delete_v2";
 
         //les propiétés
@@ -253,22 +275,22 @@ public class User {
         properties.put("Authorization", "Bearer " + this.access_tokenDrop);
 
 
-        String urlParameters ="{\"path\": \""+path+"\"}";
+        String urlParameters = "{\"path\": \"" + path + "\"}";
 
 
         // on execute la requête
         String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
         System.out.println(response);
 
-        return "<p>" + responseRequeteannexe     + "</p>";
+        return "<p>" + responseRequeteannexe + "</p>";
 
     }
 
-        
+
     @Path("/RenameDropBox")
- //   @GET //A changer en PUT
+    //   @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
-    public String renameFileDropBox (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String newTitleParam) throws IOException {
+    public String renameFileDropBox(@QueryParam("fileId") String fileIdParam, @QueryParam("title") String newTitleParam) throws IOException {
 
         String fileId = fileIdParam;
         String url = "https://api.dropboxapi.com/2/files/move_v2";
@@ -281,7 +303,7 @@ public class User {
         propertiesRequeteAnnexe.put("Content-Type", "application/json");
         propertiesRequeteAnnexe.put("Authorization", "Bearer " + this.access_tokenDrop);
 
-        String urlParametersrequeteAnnexe ="{\"path\": \""+fileId+"\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
+        String urlParametersrequeteAnnexe = "{\"path\": \"" + fileId + "\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
 
         String responseRequeteannexe = HttpRequest.Request.setRequest(urlRequeteannexe, "POST", urlParametersrequeteAnnexe, propertiesRequeteAnnexe);
 
@@ -295,10 +317,10 @@ public class User {
         properties.put("Authorization", "Bearer " + this.access_tokenDrop);
         properties.put("Content-Type", "application/json");
 
-        String urlParameters = "{\"from_path\": \""+path+"\",\"to_path\": \"/"+newTitle+"\",\"allow_shared_folder\": false,\"autorename\": false,\"allow_ownership_transfer\": false}";
+        String urlParameters = "{\"from_path\": \"" + path + "\",\"to_path\": \"/" + newTitle + "\",\"allow_shared_folder\": false,\"autorename\": false,\"allow_ownership_transfer\": false}";
 
         // on execute la requête
-        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters,properties);
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
 
         return "<p>" + response + "</p>";
 
@@ -307,7 +329,7 @@ public class User {
     @Path("/UploadDropBox")
     @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
-    public String renameFileDropBox (File fileUpload) throws IOException {
+    public String renameFileDropBox(File fileUpload) throws IOException {
 
 
         String url = "https://content.dropboxapi.com/2/files/upload";
@@ -318,7 +340,7 @@ public class User {
         properties.put("Authorization", "Bearer " + this.access_tokenDrop);
 
 
-        String urlParameters ="{\"path\": \"/testupload\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}";
+        String urlParameters = "{\"path\": \"/testupload\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}";
 
 
         // on execute la requête
@@ -329,6 +351,4 @@ public class User {
 
     }
 
-    }
-
-    
+}
