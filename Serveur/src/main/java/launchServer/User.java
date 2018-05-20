@@ -125,6 +125,33 @@ public class User {
 
     }
 
+    @Path("/SpaceDropBox")
+    @GET //A changer en DELETE
+    @Produces(MediaType.TEXT_HTML)
+    public String spaceDropBox() throws IOException {
+
+
+        String url = "https://api.dropboxapi.com/2/users/get_space_usage";
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "POST", "", properties);
+
+
+            JSONObject jsonInfos = new JSONObject(response);
+            System.out.println(jsonInfos);
+            int usedSpace = jsonInfos.getInt("used") ;
+            int totalAllocation = jsonInfos.getJSONObject("allocation").getInt("allocated");
+
+            double espaceRestant = (totalAllocation - usedSpace) *9.31*Math.pow(10,-10);
+
+
+        return "<p>" + "espace restant : " + espaceRestant+  "Go"+ "</p>";
+    }
+
     @Path("/Files")
     @Produces(MediaType.TEXT_HTML)
     @GET
@@ -240,7 +267,7 @@ public class User {
     @Path("/RenameDropBox")
     @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
-    public String renameFileDropBox (@QueryParam("fileId") String fileIdParam, @QueryParam("newTitle") String newTitleParam) throws IOException {
+    public String renameFileDropBox (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String newTitleParam) throws IOException {
 
         String fileId = fileIdParam;
         String url = "https://api.dropboxapi.com/2/files/move_v2";
@@ -279,4 +306,33 @@ public class User {
 
     }
 
-}
+    @Path("/UploadDropBox")
+    @GET //A changer en PUT
+    @Produces(MediaType.TEXT_HTML)
+    public String renameFileDropBox (File fileUpload) throws IOException {
+
+
+        String url = "https://content.dropboxapi.com/2/files/upload";
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Content-Type", "application/octet-stream");
+        properties.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+
+        String urlParameters ="{\"path\": \"/testupload\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}";
+
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
+        System.out.println(response);
+
+        return "<p>" + response + "</p>";
+
+    }
+
+
+
+
+
+    }
