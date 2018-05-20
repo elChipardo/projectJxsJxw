@@ -38,7 +38,7 @@ public class User {
         return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/RenameDrive" + ">" + "renommer fichier"  +"</a>" + "<br>";
+                "<a href=http://localhost:8080/ServeurDrive/RenameGoogleDrive?fileId=kdsg&title=labiteADudule"+ ">" + "renommer fichier"  +"</a>" + "<br>";
 
     }
 
@@ -173,8 +173,8 @@ public class User {
 
     }
 
-    @Path("/DeleteDrive")
-    @GET //A changer en DELETE
+    @Path("/DeleteGoogleDrive")
+   // @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
     public String deleteFileGoogle(@QueryParam("fileId") String fileIdParam) throws IOException {
     	
@@ -192,8 +192,8 @@ public class User {
         return "<p>" + response + "</p>";
     }
 
-    @Path("/RenameDrive")
-    @GET //A changer en PUT
+    @Path("/RenameGoogleDrive")
+   // @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
     public String renameFile (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String titleParam) throws IOException {
         
@@ -216,7 +216,7 @@ public class User {
 }
 
     @Path("/DeleteDropBox")
-    @GET //A changer en DELETE
+   // @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
     public String deleteFileDropBox(@QueryParam("fileId") String fileIdParam) throws IOException {
 
@@ -264,8 +264,9 @@ public class User {
 
     }
 
+        
     @Path("/RenameDropBox")
-    @GET //A changer en PUT
+ //   @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
     public String renameFileDropBox (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String newTitleParam) throws IOException {
 
@@ -290,9 +291,6 @@ public class User {
 
         // fin requete annexe
 
-
-
-        //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         properties.put("Authorization", "Bearer " + this.access_tokenDrop);
         properties.put("Content-Type", "application/json");
@@ -331,8 +329,6 @@ public class User {
 
     }
 
-
-
-
-
     }
+
+    

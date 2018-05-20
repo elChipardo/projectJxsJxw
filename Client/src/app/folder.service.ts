@@ -35,20 +35,22 @@ export class FolderService {
 
 	//------- PUT DATA -------
 	//update name, move
-	updateRenameData(url: string, nameString: string, data){
-		let body = JSON.stringify(data);
-		return this.http.put(url+"/rename/"+data.name+"?new=/"+ nameString, data);
+	updateRenameData(plat: string, id: string, newname: string, data){
+		//let body = JSON.stringify(data);
+		console.log("http://localhost:8080/ServeurDrive/Rename"+plat+"?fileId="+id+"&title="+newname, data);
+		return this.http.put("http://localhost:8080/ServeurDrive/Rename"+plat+"?fileId="+id+"&title="+newname, data);
 	}
 
 	updateMoveData(urlOld: string, newUrl: string, data){
-		let body = JSON.stringify(data);
+		//let body = JSON.stringify(data);
 		return this.http.put(urlOld+"/move/"+data.name+"?new=/"+ newUrl, data);
 	}
 
 	//------- DELETE DATA -------
 	//remove data
-	deleteData(url: string, name: string){
-		return this.http.delete(url+"/delete/"+name);
+	deleteData(plat: string, id: string): Observable<any> {
+		console.log("http://localhost:8080/ServeurDrive/Delete"+plat+"?fileId="+id);
+		return this.http.delete<any>('http://localhost:8080/ServeurDrive/Delete'+plat+'?fileId='+id);
 	}
 }
 

@@ -2,7 +2,9 @@ const PROXY_CONFIG = [
 	{
 		context: [
 			"/ServeurDrive",
-			"ServeurDrive/Files"
+			"ServeurDrive/Files",
+			
+
 		],
 		target : "http://localhost:8080",
 		secure: false,

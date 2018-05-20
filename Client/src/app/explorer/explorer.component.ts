@@ -12,7 +12,8 @@ import { File } from 'file';
 })
 export class ExplorerComponent implements OnInit {
 	apiService: FolderService;
-	listFolder: Folder[];
+	listParent: Parent[];
+		listFolder: Parent[];
 	public blop;
 	constructor(serviceFolder : FolderService){
 		this.apiService = serviceFolder;
@@ -21,15 +22,16 @@ export class ExplorerComponent implements OnInit {
 	ngOnInit(){
    	this.apiService.getAllJSON().subscribe(res => {
    		var rootFolder = new Array<Parent>();
+   		this.listParent=rootFolder
    		this.blop=res.items;
 
    		console.log(this.blop);
 
 		for(let file in this.blop){
-			if(this.blop[file].type ="dossier"){
-			rootFolder.push(new Folder(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif));
+			if(this.blop[file].type =="dossier"){
+			rootFolder.push(new Folder(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif,this.blop[file].id));
 			}else{
-				rootFolder.push(new File(this.blop[file].title,this.blop[file].size,this.blop[file].dateModif))
+			rootFolder.push(new File(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif,this.blop[file].id));
 			}
 		}
 		this.listFolder=rootFolder;
@@ -46,6 +48,15 @@ export class ExplorerComponent implements OnInit {
 		console.log('on supprime')
 		if (confirm("êtes vous sur de vouloir supprimer le fichier")) { 
         alert("vous êtes d'accord")
+        var p= this.check();
+        console.log(p.nom);
+        
+
+           	this.apiService.deleteData(p.plateforme,p.id).subscribe(res => {
+	});
+       
+
+     
         //supprimer le fichier selectionné
     }else{
         alert("vous n'êtes pas d'accord")
@@ -57,6 +68,59 @@ export class ExplorerComponent implements OnInit {
 	 renommer(){
 	 	console.log('on renomme')
     var newName=prompt('Indiquez ici le nouveau nom de fichier');
-    //faire un appel au changement de nom
+    var p= this.check();
+    this.apiService.updateRenameData(p.plateforme, p.id, newName, true).subscribe(res => {
+	});
+    //faire un appel au changement de no
+}
+
+	 isFile(m : Parent): boolean{
+		if(m.type =='fichier'){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	check():Parent {
+		var inputs = document.getElementsByTagName('input');
+		var inputsLength = inputs.length;
+		for (var i = 0 ; i < inputsLength ; i++) {
+			if (inputs[i].type == 'radio' && inputs[i].checked) {
+				//alert('La case cochée est la n°'+ inputs[i].id);
+				
+
+				//console.log(this.listFolder[0].id==inputs[i].id);
+				for (var b=0; b<this.listFolder.length; b++){
+					
+					//console.log('1enIVztIQDwlVQ7OVnLX5x2nTwW59opJBHAS-7IDjucc'=='1enIVztIQDwlVQ7OVnLX5x2nTwW59opJBHAS-7IDjucc');
+					if(inputs[i].id==this.listFolder[b].id){
+					//	alert(this.listFolder[b].id+ "trouvé");
+						return this.listFolder[b];
+					}
+				}
+			}
+		}
+	}
+	
+actualiser(){
+this.apiService.getAllJSON().subscribe(res => {
+   		var rootFolder = new Array<Parent>();
+   		this.listParent=rootFolder
+   		this.blop=res.items;
+
+   		console.log(this.blop);
+
+		for(let file in this.blop){
+			if(this.blop[file].type =="dossier"){
+			rootFolder.push(new Folder(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif,this.blop[file].id));
+			}else{
+			rootFolder.push(new File(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif,this.blop[file].id));
+			}
+		}
+		this.listFolder=rootFolder;
+    console.log(this.listFolder);
+
+	});
 }
 }
