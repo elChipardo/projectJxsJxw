@@ -147,7 +147,7 @@ public class User {
     }
 
     @Path("/DeleteGoogleDrive")
-    @GET //A changer en DELETE
+   // @GET //A changer en DELETE
     @Produces(MediaType.TEXT_HTML)
     public String deleteFileGoogle(@QueryParam("fileId") String fileIdParam) throws IOException {
     	
