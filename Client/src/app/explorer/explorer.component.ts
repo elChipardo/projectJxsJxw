@@ -70,7 +70,8 @@ export class ExplorerComponent implements OnInit {
 	 	console.log('on renomme')
     var newName=prompt('Indiquez ici le nouveau nom de fichier');
     var p= this.check();
-    this.apiService.updateRenameData(p.plateforme, p.id, newName, true);
+    this.apiService.updateRenameData(p.plateforme, p.id, newName, true).subscribe(res => {
+	});
     //faire un appel au changement de no
 }
 

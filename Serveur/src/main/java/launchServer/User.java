@@ -166,7 +166,7 @@ public class User {
     }
 
     @Path("/RenameGoogleDrive")
-    @GET //A changer en PUT
+   // @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)
     public String renameFile (@QueryParam("fileId") String fileIdParam, @QueryParam("title") String titleParam) throws IOException {
         
