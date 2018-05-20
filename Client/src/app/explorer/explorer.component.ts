@@ -50,14 +50,13 @@ export class ExplorerComponent implements OnInit {
         alert("vous êtes d'accord")
         var p= this.check();
         console.log(p.nom);
-        if (p.plateforme=="GoogleDrive"){
+        
 
            	this.apiService.deleteData(p.plateforme,p.id).subscribe(res => {
 	});
-        }else{
+       
 
-           	this.apiService.deleteData(p.plateforme,p.id);
-        }
+     
         //supprimer le fichier selectionné
     }else{
         alert("vous n'êtes pas d'accord")
