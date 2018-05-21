@@ -197,11 +197,12 @@ public class User {
     @GET
     public String getAllFiles() throws IOException {
 
+        TreatementFiles.createliste();
+
         if(! access_tokenGoogle.equals("")) {
             GoogleDrive.getFiles(this.access_tokenGoogle);
         }
 
-            System.out.println(access_tokenDrop.equals(""));
         if(!access_tokenDrop.equals("")) {
             DropBox.getFiles(this.access_tokenDrop);
         }

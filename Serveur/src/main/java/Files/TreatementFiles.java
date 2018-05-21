@@ -15,9 +15,15 @@ public class TreatementFiles {
 
     static List<File> listeFiles;
 
-    public static void treatFilesGoogle(JSONObject files){
+    public static void createliste(){
 
         listeFiles = new ArrayList<>();
+
+
+    }
+
+    public static void treatFilesGoogle(JSONObject files){
+
 
         JSONArray listfiles = files.getJSONArray("items");
         System.out.println("taille :"+listfiles.length());
@@ -44,9 +50,6 @@ public class TreatementFiles {
 
 
         }
-        System.out.println(afficherFichiers());
-
-
 
     }
 
@@ -70,6 +73,7 @@ public class TreatementFiles {
 
 
         }
+
     }
 
     public static JSONObject generateJSONFiles(){
@@ -91,7 +95,6 @@ public class TreatementFiles {
         }
 
         json.put("items",array);
-        System.out.println(json.toString());
 
         return json;
 
