@@ -209,7 +209,7 @@ public class User {
 
         if(! access_tokenGoogle.equals("")) {
             GoogleDrive.getFiles(this.access_tokenGoogle, "root");
-           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile), true, access_tokenGoogle);
+           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile),  access_tokenGoogle);
 
         }
         ArrayList<Files.File> listeFilesDropBox = new ArrayList<Files.File>();
@@ -238,7 +238,7 @@ public class User {
 
         ArrayList<Files.File> listeFilesGoogle= new ArrayList<Files.File>();
         try {
-            listeFilesGoogle = TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile),true, access_tokenGoogle);
+            listeFilesGoogle = TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile), access_tokenGoogle);
         } catch (Exception e){
             System.out.println(e);
         }

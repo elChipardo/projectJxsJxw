@@ -36,9 +36,7 @@ public class GoogleDrive  {
     @Produces(MediaType.TEXT_HTML)
     public static void getFiles(String accessT, String path) throws IOException {
 
-
-
-        String url ="https://www.googleapis.com/drive/v2/files/"+path+"/children";
+        String url ="https://www.googleapis.com/drive/v2/files?q=%27"+path+"%27%20in%20parents";
 
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
