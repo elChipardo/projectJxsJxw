@@ -21,6 +21,9 @@ export class FolderService {
 	getFolderJSON(name: string): Observable<any> {
 		return this.http.get(this.baseUrl+"/"+name);
 	}
+	getFreeSpace(plat: string): Observable<any>{
+		return this.http.get<any>(this.baseUrl+"ServeurDrive/Space"+plat);
+	}
 
 	//get file ? url/nameFolder/nameFile
 
@@ -41,9 +44,10 @@ export class FolderService {
 		return this.http.put("http://localhost:8080/ServeurDrive/Rename"+plat+"?fileId="+id+"&title="+newname, data);
 	}
 
-	updateMoveData(urlOld: string, newUrl: string, data){
+	updateMoveData(plat: string, id: string, newDossier: string, data){
 		//let body = JSON.stringify(data);
-		return this.http.put(urlOld+"/move/"+data.name+"?new=/"+ newUrl, data);
+		console.log("http://localhost:8080/ServeurDrive/Move"+plat+"?fileId="+id+"&path="+newDossier, data);
+		return this.http.put("http://localhost:8080/ServeurDrive/Move"+plat+"?fileId="+id+"&path="+newDossier, data);
 	}
 
 	//------- DELETE DATA -------

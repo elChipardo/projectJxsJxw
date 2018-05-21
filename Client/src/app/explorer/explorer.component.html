@@ -2,6 +2,8 @@
 <div style="text-align:center">
 
   <header>
+
+
      <div class="row">
 
         <div class="container col-lg-2 align-self-center">                                       
@@ -12,22 +14,9 @@
                 <ul class="dropdown-menu">
                     <li><a tabindex="-1" (click)="suppr()" >Supprimer</a></li>
                     <li><a tabindex="-1" (click)="renommer()">Renommer</a></li>
-                    <li class="dropdown-submenu">
-                        <a class="test" tabindex="-1" >Déplacer <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a tabindex="-1" id="depGD">GoogleDrive</a></li>
-                            <li><a tabindex="-1" id="depDB">DropBox</a></li>
-                            <li><a tabindex="-1"  id="depOD">OneDrive</a></li>
-                        </ul>
-                      </li>
-                    <li class="dropdown-submenu">
-                        <a class="test" tabindex="-1" >Ajouter <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a tabindex="-1" >GoogleDrive</a></li>
-                            <li><a tabindex="-1" >DropBox</a></li>
-                            <li><a tabindex="-1" >OneDrive</a></li>
-                        </ul>
-                    </li>
+                     <li><a tabindex="-1" (click)="move()">Déplacer</a></li>
+                      <li><a tabindex="-1" >Ajouter</a></li>
+                    
                 </ul>
             </div>
         </div>
@@ -52,7 +41,10 @@
     </div>
 
  <div class="col-lg-2 align-self-center">
- <a class="btn btn-outline-primary" routerLink="/" >Home</a>   
+ <a class="btn btn-outline-primary" routerLink="/" >Home</a> 
+
+ <a class="btn btn-outline-primary" routerLink="/createaccount" >log plateforme </a>    
+
  </div>
      </div>
 
@@ -62,8 +54,12 @@
   <div id="image_file">
   </div>
   <section>
+
+    
     <article>
       <h1>
+
+
         Liste des fichiers
       </h1>
 
@@ -71,11 +67,15 @@
       <table width=100%>
         <tr>
 
-          <th> Cochage</th>
-          <th>blop</th>
+          <th></th>
+          <th>Type</th>
           <th>Nom </th>
           <th>Plateforme</th>
           <th>Date modif</th>
+           <th>Size</th>
+            <th>Rights</th>
+             <th>Users</th>
+
         </tr>
 
 
@@ -84,7 +84,7 @@
           <input type="radio" name="parent" id={{fold.id}} />
        <!--  <td *ngIf="isFile(fold.type) "> coucoub</td>
        div *ngIf="true; bonjour"></div>-->
-          <td></td>
+          <td>{{fold.type}}</td>
           <td>{{fold.nom}}</td>
           <!--<td><img src="/images/icone-dossier.png" alt="Photo de montagne" /></td>-->
           <td>{{fold.plateforme}}</td>
@@ -100,8 +100,17 @@
 
     </article>
     <aside>
-      <p>Espace libre :</p>
+      <h1>Espace libre :</h1>
+      <p>
+        {{free}} <br>
+      {{freebis}} <br>
+
+    </p>
+
+  
+
     </aside>
+
   </section>
 
 
