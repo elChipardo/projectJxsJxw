@@ -5,6 +5,7 @@ import HttpRequest.Request;
 import org.json.JSONObject;
 
 import java.io.File;
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -21,8 +22,8 @@ import java.util.HashMap;
 @Path("")
 public class User {
 
-    private static String access_tokenGoogle;
-    private static String access_tokenDrop;
+    private static String access_tokenGoogle="";
+    private static String access_tokenDrop="";
     private static String codeGoogle;
     private static String codeDropBox;
     private static String AppKey = "84imrzb8n7lobyz";
@@ -183,13 +184,12 @@ public class User {
     @GET
     public String getAllFiles() throws IOException {
 
-        if(!access_tokenGoogle.equals("")) {
+        if(! access_tokenGoogle.equals("")) {
             GoogleDrive.getFiles(this.access_tokenGoogle);
         }
 
-
+            System.out.println(access_tokenDrop.equals(""));
         if(!access_tokenDrop.equals("")) {
-
             DropBox.getFiles(this.access_tokenDrop);
         }
 
