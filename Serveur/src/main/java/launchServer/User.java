@@ -216,7 +216,9 @@ public class User {
 
         if(!access_tokenDrop.equals("")) {
             DropBox.getFiles(this.access_tokenDrop);
-            listeFilesDropBox= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile));
+
+            listeFilesDropBox=TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
+
 
         }
 

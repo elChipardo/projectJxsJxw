@@ -55,12 +55,7 @@ public class DropBox {
 
         System.out.println(response);
 
-        try {
-            TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
-        }
-        catch ( Exception e){
-            System.out.println(e);
-        }
+
 
 
 

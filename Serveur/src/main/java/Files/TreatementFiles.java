@@ -50,8 +50,8 @@ public class TreatementFiles {
 
     }
 
-    public static List<File> treatFilesDropBox(JSONObject files) {
-        List<File> listeFiles = new ArrayList<File>();
+    public static ArrayList<File> treatFilesDropBox(JSONObject files) {
+        ArrayList<File> listeFiles = new ArrayList<File>();
 
         JSONArray listfiles = files.getJSONArray("entries");
 
@@ -77,6 +77,8 @@ public class TreatementFiles {
     }
 
     public static JSONObject generateJSONFiles(ArrayList<File> listeFiles){
+
+        afficherFichiers(listeFiles);
 
         JSONObject json = new JSONObject();
 

@@ -56,12 +56,6 @@ public class GoogleDrive  {
     String response = HttpRequest.Request.setRequest(url,"GET",urlParameters, properties);
 
 
-    try {
-        TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile));
-    }
-    catch ( Exception e){
-        System.out.println(e);
-    }
 
 }
 
