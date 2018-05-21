@@ -62,8 +62,6 @@ public class DropBox {
             System.out.println(e);
         }
 
-
-
         return TreatementFiles.generateJSONFiles().toString();
 
 
