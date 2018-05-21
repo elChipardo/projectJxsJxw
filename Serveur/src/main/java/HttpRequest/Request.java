@@ -98,8 +98,7 @@ public class Request {
             con.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             wr.writeBytes(urlParameters);
-            wr.flush();
-            wr.close();
+            wr.writeBytes("\r\n");
         }
 
         int maxBufferSize = 1*1024*1024;

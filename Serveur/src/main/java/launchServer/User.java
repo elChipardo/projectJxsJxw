@@ -44,7 +44,7 @@ public class User {
                 "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/DeleteGoogleDrive?fileId=1F7fCDzdje9D0sXo-E2vH1h6Af_KQdt1S1oVubUl0oro"+ ">" + "supprimer fichier"  +"</a>" + "<br>"+
-                "<a href=http://localhost:8080/ServeurDrive/UploadGoogleDrive" + ">" + "up fichier" + "</a>" + "<br>";
+                "<a href=http://localhost:8080/ServeurDrive/UploadGoogleDrive?path=/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/project.pdf&extension=pdf" + ">" + "up fichier" + "</a>" + "<br>";
 
     }
 
@@ -440,17 +440,61 @@ public class User {
     }
 
     @Path("/UploadGoogleDrive")
-    @GET
     @Produces(MediaType.TEXT_HTML)
-    public String uploadGoogleDrive() throws IOException {
+    public String uploadGoogleDrive(@QueryParam("path") String pathParam, @QueryParam("extension") String typeParam) throws IOException {
 
         String url = "https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart";
 
-        File fileToInsert = new File("/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/project.pdf");
+        String finalContentType = "";
+        switch (typeParam){
+            case "pdf":
+                finalContentType = "application/" + typeParam;
+                break;
+            case "xml":
+                finalContentType = "application/" + typeParam;
+                break;
+            case "zip":
+                finalContentType = "application/" + typeParam;
+                break;
+            case "json":
+                finalContentType = "application/" + typeParam;
+                break;
+            case "mpeg":
+                finalContentType = "audio/" + typeParam;
+                break;
+            case "gif":
+                finalContentType = "image/" + typeParam;
+                break;
+            case "jpeg":
+                finalContentType = "image/" + typeParam;
+                break;
+            case "png":
+                finalContentType = "image/" + typeParam;
+                break;
+            case "css":
+                finalContentType = "text/" + typeParam;
+                break;
+            case "csv":
+                finalContentType = "text/" + typeParam;
+                break;
+            case "html":
+                finalContentType = "text/" + typeParam;
+                break;
+            case "js":
+                finalContentType = "text/javascript";
+                break;
+            case "mp4":
+                finalContentType = "video/" + typeParam;
+                break;
+            default:
+                System.out.println("impossible");
+        }
+       // File fileToInsert = new File("/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/triso.JPG");
+        File fileToInsert = new File(pathParam);
         FileInputStream fileInputStream = new FileInputStream(fileToInsert);
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
-        properties.put("Content-Type", "application/pdf");
+        properties.put("Content-Type", finalContentType);
         properties.put("Content-Length", String.valueOf(fileToInsert.length()));
         properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
         properties.put("uploadType", "multipart");
