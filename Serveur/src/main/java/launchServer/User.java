@@ -215,7 +215,7 @@ public class User {
         ArrayList<Files.File> listeFilesDropBox = new ArrayList<Files.File>();
 
         if(!access_tokenDrop.equals("")) {
-            DropBox.getFiles(this.access_tokenDrop);
+            DropBox.getFiles(this.access_tokenDrop, "");
 
             listeFilesDropBox=TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
 
@@ -254,6 +254,24 @@ public class User {
 
         return TreatementFiles.generateJSONFiles(listeFilesGoogle).toString();
     }
+
+    @Path("/ChildrensDropBox")
+    @Produces(MediaType.TEXT_HTML)
+    @GET
+    public String getChildrensDropBox(@QueryParam("folderId") String folderNameParam ) throws IOException {
+
+        ArrayList<Files.File> listeFilesChildrens = new ArrayList<Files.File>();
+
+
+        if (!access_tokenDrop.equals("")) {
+            DropBox.getFiles(this.access_tokenDrop, "/"+folderNameParam);
+
+            listeFilesChildrens = TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
+        }
+        return TreatementFiles.generateJSONFiles(listeFilesChildrens).toString();
+
+    }
+
 
     @Path("/DeleteGoogleDrive")
     // @GET //A changer en DELETE
