@@ -38,7 +38,7 @@ public class DropBox {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public static String getFiles(String accessT) throws IOException {
+    public static void getFiles(String accessT) throws IOException {
 
         String url = "https://api.dropboxapi.com/2/files/list_folder";
 
@@ -55,14 +55,8 @@ public class DropBox {
 
         System.out.println(response);
 
-        try {
-            TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
-        }
-        catch ( Exception e){
-            System.out.println(e);
-        }
 
-        return TreatementFiles.generateJSONFiles().toString();
+
 
 
 

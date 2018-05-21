@@ -21,9 +21,11 @@ article {
 aside
 { position: relative;
   width: 240px;
-  margin: 20px 0px 10px 20px;
+  margin: 20px 0px 50px 20px;
   border-left: 2px solid black; 
   border-left-color: #69003F;
+  text-align: left;
+  padding-left: 20px;
 }
 .dropdown-submenu {
     position: relative;
