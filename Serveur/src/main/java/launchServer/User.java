@@ -128,7 +128,7 @@ public class User {
     @Path("/SpaceGoogleDrive")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public String spaceGoogleDrive() throws IOException {
+    public JSONObject spaceGoogleDrive() throws IOException {
 
         String url = "https://www.googleapis.com/drive/v2/about";
 
@@ -149,15 +149,20 @@ public class User {
         double espaceRestant = (totalAllocation - usedSpace) * 9.31 * Math.pow(10, -10);
         double newEspaceRestant = (double) Math.round(espaceRestant * 100) / 100;
 
+        JSONObject json = new JSONObject();
 
-        return  "Espace libre sur GoogleDrive : " + newEspaceRestant + " Go" + " sur 15 Go" ;
+        json.put("espaceLibreGoogleDrive", newEspaceRestant);
+        json.put("espaceTotalGoogleDrive", 15);
+
+
+        return json ;
 
     }
 
     @Path("/SpaceDropBox")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public String spaceDropBox() throws IOException {
+    public JSONObject spaceDropBox() throws IOException {
 
 
         String url = "https://api.dropboxapi.com/2/users/get_space_usage";
@@ -177,9 +182,14 @@ public class User {
         double espaceRestant = (totalAllocation - usedSpace) * 9.31 * Math.pow(10, -10);
         double newEspaceRestant = (double) Math.round(espaceRestant * 100) / 100;
 
+        JSONObject json = new JSONObject();
+
+        json.put("espaceLibreDropBox", newEspaceRestant);
+        json.put("espaceTotalDropBox", 2);
 
 
-        return  "Espace libre sur DropBox : " + newEspaceRestant + " Go" + " sur 2 Go" ;
+        return json ;
+
     }
 
     @Path("/Files")
