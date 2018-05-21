@@ -209,7 +209,7 @@ public class User {
 
         if(! access_tokenGoogle.equals("")) {
             GoogleDrive.getFiles(this.access_tokenGoogle);
-           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile));
+           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile), false, access_tokenGoogle);
 
         }
         ArrayList<Files.File> listeFilesDropBox = new ArrayList<Files.File>();
@@ -228,7 +228,7 @@ public class User {
 
     }
 
-    @Path("Childrens")
+    @Path("/ChildrensGoogleDrive")
     @Produces(MediaType.TEXT_HTML)
     @GET
     public String getChildrens(@QueryParam("folderId") String folderIdParam ) throws IOException {
@@ -245,7 +245,14 @@ public class User {
         // on execute la requête
         String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
 
-        return "<p>" + response + "</p>";
+        ArrayList<Files.File> listeFilesGoogle= new ArrayList<Files.File>();
+        try {
+            listeFilesGoogle = TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile),true, access_tokenGoogle);
+        } catch (Exception e){
+            System.out.println(e);
+        }
+
+        return TreatementFiles.generateJSONFiles(listeFilesGoogle).toString();
     }
 
     @Path("/DeleteGoogleDrive")

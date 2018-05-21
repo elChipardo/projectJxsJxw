@@ -10,13 +10,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TreatementFiles {
 
 
 
-    public static ArrayList<File> treatFilesGoogle(JSONObject files){
+    public static ArrayList<File> treatFilesGoogle(JSONObject files, boolean childrensOrNot, String accessToken) throws IOException {
 
         ArrayList<File> listeFiles = new ArrayList<File>();
 
@@ -24,17 +25,46 @@ public class TreatementFiles {
         JSONArray listfiles = files.getJSONArray("items");
         System.out.println("taille :"+listfiles.length());
         for (int i=0; i< listfiles.length();i++){
+
             String id = listfiles.getJSONObject(i).getString("id");
+            String name;
+            String date;
+            String type="file";
+            if(childrensOrNot){
 
-            String name = listfiles.getJSONObject(i).getString("title");
-            // fonctionne pas : String sharePerson = listfiles.getJSONObject(i).getJSONObject("sharingUser").getString("displayName");
-            String date = listfiles.getJSONObject(i).getString("modifiedDate");
+                    String url = "https://www.googleapis.com/drive/v2/files/"+id;
 
-            String type = "file";
-            // detection des dossiers
-            if (listfiles.getJSONObject(i).getString("mimeType").equals("application/vnd.google-apps.folder")){
-                type = "folder";
-                //foldersId.add(id);
+                //les propiétés
+                HashMap<String, String> properties = new HashMap<>();
+                properties.put("Host", "www.googleapis.com");
+                properties.put("Authorization", "Bearer " + accessToken);
+
+                // on execute la requête
+                String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
+
+                JSONObject jsonFile = new JSONObject(response);
+
+                name = jsonFile.getString("title");
+                date = jsonFile.getString("modifiedDate");
+                if (jsonFile.getString("mimeType").equals("application/vnd.google-apps.folder")) {
+                    type = "folder";
+                    System.out.println("dossier " + id);
+                }
+
+
+            }
+            else {
+                 name = listfiles.getJSONObject(i).getString("title");
+                // fonctionne pas : String sharePerson = listfiles.getJSONObject(i).getJSONObject("sharingUser").getString("displayName");
+                 date = listfiles.getJSONObject(i).getString("modifiedDate");
+
+                 type = "file";
+                // detection des dossiers
+                if (listfiles.getJSONObject(i).getString("mimeType").equals("application/vnd.google-apps.folder")) {
+                    type = "folder";
+                    System.out.println("dossier " + id);
+                }
+
             }
             File newFile = new File(name,id, "GoogleDrive","",date, type);
 
