@@ -52,6 +52,7 @@ public class TreatementFiles {
 
     public static ArrayList<File> treatFilesDropBox(JSONObject files) {
         ArrayList<File> listeFiles = new ArrayList<File>();
+        System.out.println(files);
 
         JSONArray listfiles = files.getJSONArray("entries");
 
@@ -61,10 +62,17 @@ public class TreatementFiles {
 
             String name = listfiles.getJSONObject(i).getString("name");
             // fonctionne pas : String sharePerson = listfiles.getJSONObject(i).getJSONObject("sharingUser").getString("displayName");
-            //String date = listfiles.getJSONObject(i).getString("modifiedDate");
+
+
 
             String type = listfiles.getJSONObject(i).getString(".tag");
-            File newFile = new File(name, id, "DropBox", "", "", type);
+            String date="";
+            if(type.equals("file")){
+                date = listfiles.getJSONObject(i).getString("client_modified");
+                System.out.println(date);
+
+            }
+            File newFile = new File(name, id, "DropBox", "", date, type);
 
 
             listeFiles.add(newFile);
