@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.File;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
@@ -38,7 +39,7 @@ public class User {
         return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/RenameGoogleDrive?fileId=kdsg&title=labiteADudule"+ ">" + "renommer fichier"  +"</a>" + "<br>";
+                "<a href=http://localhost:8080/ServeurDrive/DeleteGoogleDrive?fileId=1F7fCDzdje9D0sXo-E2vH1h6Af_KQdt1S1oVubUl0oro"+ ">" + "supprimer fichier"  +"</a>" + "<br>";
 
     }
 
@@ -78,8 +79,8 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
-        //java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
+        //java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -147,8 +148,8 @@ public class User {
     }
 
     @Path("/DeleteGoogleDrive")
-    @GET //A changer en DELETE
-    @Produces(MediaType.TEXT_HTML)
+    //@DELETE //A changer en DELETE
+    //@Produces(MediaType.TEXT_HTML)
     public String deleteFileGoogle(@QueryParam("fileId") String fileIdParam) throws IOException {
     	
         String fileID = fileIdParam;
@@ -157,6 +158,8 @@ public class User {
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         properties.put("Host", "www.googleapis.com");
+        properties.put("Content-Type","application/x-www-form-urlencoded");
+        properties.put("X-HTTP-Method-Override", "DELETE");
         properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
 
         // on execute la requête
