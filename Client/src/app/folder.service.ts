@@ -48,11 +48,9 @@ export class FolderService {
 
 	//------- DELETE DATA -------
 	//remove data
-	deleteData(plat: string, id: string){
-		
-
-		console.log("http://localhost:8080/ServeurDrive/Delete"+plat+"?fileId="+id)
-		return this.http.delete("http://localhost:8080/ServeurDrive/Delete"+plat+"?fileId="+id);
+	deleteData(plat: string, id: string): Observable<any> {
+		console.log("http://localhost:8080/ServeurDrive/Delete"+plat+"?fileId="+id);
+		return this.http.delete<any>('http://localhost:8080/ServeurDrive/Delete'+plat+'?fileId='+id);
 	}
 }
 

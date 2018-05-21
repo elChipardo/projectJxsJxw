@@ -50,12 +50,13 @@ export class ExplorerComponent implements OnInit {
         alert("vous êtes d'accord")
         var p= this.check();
         console.log(p.nom);
-        if (p.plateforme=="GoogleDrive"){
-           	this.apiService.deleteData(p.plateforme,p.id);
-        }else{
+        
 
-           	this.apiService.deleteData(p.plateforme,p.id);
-        }
+           	this.apiService.deleteData(p.plateforme,p.id).subscribe(res => {
+	});
+       
+
+     
         //supprimer le fichier selectionné
     }else{
         alert("vous n'êtes pas d'accord")
@@ -68,7 +69,8 @@ export class ExplorerComponent implements OnInit {
 	 	console.log('on renomme')
     var newName=prompt('Indiquez ici le nouveau nom de fichier');
     var p= this.check();
-    this.apiService.updateRenameData(p.plateforme, p.id, newName, true);
+    this.apiService.updateRenameData(p.plateforme, p.id, newName, true).subscribe(res => {
+	});
     //faire un appel au changement de no
 }
 
@@ -101,5 +103,24 @@ export class ExplorerComponent implements OnInit {
 		}
 	}
 	
+actualiser(){
+this.apiService.getAllJSON().subscribe(res => {
+   		var rootFolder = new Array<Parent>();
+   		this.listParent=rootFolder
+   		this.blop=res.items;
 
+   		console.log(this.blop);
+
+		for(let file in this.blop){
+			if(this.blop[file].type =="dossier"){
+			rootFolder.push(new Folder(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif,this.blop[file].id));
+			}else{
+			rootFolder.push(new File(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif,this.blop[file].id));
+			}
+		}
+		this.listFolder=rootFolder;
+    console.log(this.listFolder);
+
+	});
+}
 }
