@@ -9,6 +9,7 @@ import javax.management.Query;
 import javax.swing.plaf.synth.SynthTextAreaUI;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
@@ -22,6 +23,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import java.io.FileInputStream;
 
 @Path("")
 public class User {
@@ -39,11 +42,12 @@ public class User {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public String afficher() {
-        return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive" + ">" + "click ici pour s'authentifier à google" + "</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/OauthDropBox" + ">" + "click ici pour s'authentifier à dropbox" + "</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON" + "</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/RenameGoogleDrive?fileId=kdsg&title=labiteADudule" + ">" + "renommer fichier" + "</a>" + "<br>";
+    public String afficher(){
+        return "<a href=http://localhost:8080/ServeurDrive/OauthGoogleDrive"+">"+"click ici pour s'authentifier à google"+"</a>"+"<br>"+
+                "<a href=http://localhost:8080/ServeurDrive/OauthDropBox"+">"+"click ici pour s'authentifier à dropbox"+"</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
+                "<a href=http://localhost:8080/ServeurDrive/DeleteGoogleDrive?fileId=1F7fCDzdje9D0sXo-E2vH1h6Af_KQdt1S1oVubUl0oro"+ ">" + "supprimer fichier"  +"</a>" + "<br>"+
+                "<a href=http://localhost:8080/ServeurDrive/UploadGoogleDrive" + ">" + "up fichier" + "</a>" + "<br>";
 
     }
 
@@ -82,8 +86,8 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
-        //java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
+        //java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -253,6 +257,8 @@ public class User {
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         properties.put("Host", "www.googleapis.com");
+        properties.put("Content-Type","application/x-www-form-urlencoded");
+        properties.put("X-HTTP-Method-Override", "DELETE");
         properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
 
         // on execute la requête
@@ -457,6 +463,32 @@ public class User {
 
         // on execute la requête
         String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
+        System.out.println(response);
+
+        return "<p>" + response + "</p>";
+
+    }
+
+    @Path("/UploadGoogleDrive")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public String uploadGoogleDrive() throws IOException {
+
+        String url = "https://www.googleapis.com/upload/drive/v2/files?uploadType=multipart";
+
+        File fileToInsert = new File("/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/project.pdf");
+        FileInputStream fileInputStream = new FileInputStream(fileToInsert);
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Content-Type", "application/pdf");
+        properties.put("Content-Length", String.valueOf(fileToInsert.length()));
+        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
+        properties.put("uploadType", "multipart");
+
+        // on execute la requête
+        //String response = HttpRequest.RequestUpdate.setRequestUpload(url, "POST", "", properties, fileToInsert);
+       // String response = HttpRequest.Request.setRequest(url, "POST", "{ \"title\" : \"" +  fileToInsert.getName() + "\" }", properties);
+        String response = HttpRequest.Request.setRequestUpload(url, "POST", "" , properties, fileInputStream);
         System.out.println(response);
 
         return "<p>" + response + "</p>";
