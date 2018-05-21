@@ -208,8 +208,8 @@ public class User {
         ArrayList<Files.File> listeFilesGoogle = new ArrayList<Files.File>();
 
         if(! access_tokenGoogle.equals("")) {
-            GoogleDrive.getFiles(this.access_tokenGoogle);
-           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile), false, access_tokenGoogle);
+            GoogleDrive.getFiles(this.access_tokenGoogle, "root");
+           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile), true, access_tokenGoogle);
 
         }
         ArrayList<Files.File> listeFilesDropBox = new ArrayList<Files.File>();
@@ -233,17 +233,8 @@ public class User {
     @GET
     public String getChildrens(@QueryParam("folderId") String folderIdParam ) throws IOException {
 
-        String folderId=folderIdParam;
 
-        String url ="https://www.googleapis.com/drive/v2/files/"+folderId+"/children";
-
-        //les propiétés
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("Host", "www.googleapis.com");
-        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
-
-        // on execute la requête
-        String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
+        GoogleDrive.getFiles(this.access_tokenGoogle, folderIdParam);
 
         ArrayList<Files.File> listeFilesGoogle= new ArrayList<Files.File>();
         try {

@@ -34,26 +34,19 @@ public class GoogleDrive  {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public static void getFiles(String accessT) throws IOException {
+    public static void getFiles(String accessT, String path) throws IOException {
 
 
-    String url = "https://www.googleapis.com/drive/v2/files/";
 
+        String url ="https://www.googleapis.com/drive/v2/files/"+path+"/children";
 
-    //les propiétés
-    HashMap<String,String> properties = new HashMap<>();
-    properties.put("Host", "www.googleapis.com");
-    properties.put("Authorization", "Bearer " + accessT);
-    properties.put("orderBy", "folder");
-    properties.put("maxResults","1000");
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Host", "www.googleapis.com");
+        properties.put("Authorization", "Bearer " + accessT);
 
-        String urlParameters="";
-
-
-        // maximum fichiers String urlParameters = "maxResults=1000";
-
-    // on execute la requête
-    String response = HttpRequest.Request.setRequest(url,"GET",urlParameters, properties);
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
 
 
 

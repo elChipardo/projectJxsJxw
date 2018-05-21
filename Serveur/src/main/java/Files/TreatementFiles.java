@@ -19,7 +19,8 @@ public class TreatementFiles {
 
     public static ArrayList<File> treatFilesGoogle(JSONObject files, boolean childrensOrNot, String accessToken) throws IOException {
 
-        ArrayList<File> listeFiles = new ArrayList<File>();
+        ArrayList<Files.File> listeFiles = new ArrayList<File>();
+        ArrayList<Files.File> listeFolders = new ArrayList<File>();
 
 
         JSONArray listfiles = files.getJSONArray("items");
@@ -48,7 +49,16 @@ public class TreatementFiles {
                 date = jsonFile.getString("modifiedDate");
                 if (jsonFile.getString("mimeType").equals("application/vnd.google-apps.folder")) {
                     type = "folder";
+                    File newFile = new File(name,id, "GoogleDrive","",date, type);
+                    listeFolders.add(newFile);
+
                     System.out.println("dossier " + id);
+                }
+                else {
+
+                    File newFile = new File(name,id, "GoogleDrive","",date, type);
+                    listeFiles.add(newFile);
+
                 }
 
 
@@ -66,17 +76,16 @@ public class TreatementFiles {
                 }
 
             }
-            File newFile = new File(name,id, "GoogleDrive","",date, type);
 
 
-            listeFiles.add(newFile);
 
 
 
 
         }
 
-        return listeFiles;
+        listeFolders.addAll(listeFiles);
+        return listeFolders;
 
     }
 
