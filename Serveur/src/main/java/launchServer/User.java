@@ -128,7 +128,7 @@ public class User {
     @Path("/SpaceGoogleDrive")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public JSONObject spaceGoogleDrive() throws IOException {
+    public String spaceGoogleDrive() throws IOException {
 
         String url = "https://www.googleapis.com/drive/v2/about";
 
@@ -155,14 +155,14 @@ public class User {
         json.put("espaceTotalGoogleDrive", 15);
 
 
-        return json ;
+        return json.toString() ;
 
     }
 
     @Path("/SpaceDropBox")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public JSONObject spaceDropBox() throws IOException {
+    public String spaceDropBox() throws IOException {
 
 
         String url = "https://api.dropboxapi.com/2/users/get_space_usage";
@@ -188,7 +188,7 @@ public class User {
         json.put("espaceTotalDropBox", 2);
 
 
-        return json ;
+        return json.toString() ;
 
     }
 
