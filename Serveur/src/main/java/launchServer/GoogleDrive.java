@@ -66,28 +66,5 @@ public class GoogleDrive  {
 
 
 }
-/**
-    @Path("/Delete")
-    @GET //A changer en DELETE
-    @Produces(MediaType.TEXT_HTML)
-    public String deleteFile() throws IOException {
-
-
-        String fileID = "1L6s_6soghMDimTcEJ-fy6ixyfrHCnB0c15Q8B-abZZE";
-        String url = "https://www.googleapis.com/drive/v2/files/" + fileID;
-
-        //les propiétés
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("Host", "www.googleapis.com");
-        properties.put("Authorization", "Bearer " + this.access_token);
-
-        // on execute la requête
-        String response = HttpRequest.Request.setRequest(url, "DELETE", "", properties);
-
-        return "<p>" + response + "</p>";
-    }
-
-
-*/
 
 }

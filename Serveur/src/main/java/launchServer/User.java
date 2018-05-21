@@ -340,6 +340,73 @@ public class User {
 
     }
 
+    @Path("/MoveGoogleDrive")
+    @Produces(MediaType.TEXT_HTML)
+    public String moveFileGoogleDrive(@QueryParam("fileId") String fileIdParam, @QueryParam("path") String newPathParam) throws IOException{
+
+        String fileId=fileIdParam;
+        String newPath = newPathParam;
+
+        // déplacer le fichier
+        String url = "https://www.googleapis.com/drive/v2/files/"+fileId+"/parents";
+
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Host", "www.googleapis.com");
+        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
+        properties.put("Content-Type", "application/json");
+
+
+        String urlParameters="{ \"id\" : \"" + newPath + "\" }";
+
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
+
+        
+
+        return "<p>" + response + "</p>";
+
+
+
+    }
+
+    // le path doit être de la forme "newpath/"
+    @Path("/MoveDropBox")
+    @Produces(MediaType.TEXT_HTML)
+    public String moveFileDropBox(@QueryParam("fileId") String fileIdParam, @QueryParam("path") String newPathParam) throws IOException {
+
+        String fileId = fileIdParam;
+        String url = "https://api.dropboxapi.com/2/files/move_v2";
+        String newPath  = newPathParam;
+
+        // requete annexe qui recupere le chemin du fichier
+        String urlRequeteannexe = "https://api.dropboxapi.com/2/files/get_metadata";
+
+        HashMap<String, String> propertiesRequeteAnnexe = new HashMap<>();
+        propertiesRequeteAnnexe.put("Content-Type", "application/json");
+        propertiesRequeteAnnexe.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+        String urlParametersrequeteAnnexe = "{\"path\": \"" + fileId + "\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
+
+        String responseRequeteannexe = HttpRequest.Request.setRequest(urlRequeteannexe, "POST", urlParametersrequeteAnnexe, propertiesRequeteAnnexe);
+
+        JSONObject jsonRequeteAnnexe = new JSONObject(Request.requestFile);
+
+        String path = jsonRequeteAnnexe.getString("path_lower");
+        String nameFile = jsonRequeteAnnexe.getString("name");
+
+        // fin requete annexe
+
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Authorization", "Bearer " + this.access_tokenDrop);
+        properties.put("Content-Type", "application/json");
+
+        String urlParameters = "{\"from_path\": \"" + path + "\",\"to_path\": \"/" + newPath +"/" + nameFile + "\",\"allow_shared_folder\": false,\"autorename\": false,\"allow_ownership_transfer\": false}";
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
+
+        return "<p>" + response + "</p>";
+
+    }
     @Path("/UploadDropBox")
     @GET //A changer en PUT
     @Produces(MediaType.TEXT_HTML)

@@ -38,6 +38,7 @@ public class TreatementFiles {
             // detection des dossiers
             if (listfiles.getJSONObject(i).getString("mimeType").equals("application/vnd.google-apps.folder")){
                 System.out.println("dossier " + name);
+                System.out.println("id : " +id);
                 type = "folder";
                 //foldersId.add(id);
             }
