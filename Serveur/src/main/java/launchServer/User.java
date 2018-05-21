@@ -228,7 +228,7 @@ public class User {
 
     }
 
-    @Path("/ChildrensGoogleDrive")
+    @Path("/ChildrenGoogleDrive")
     @Produces(MediaType.TEXT_HTML)
     @GET
     public String getChildrens(@QueryParam("folderId") String folderIdParam ) throws IOException {
@@ -246,7 +246,7 @@ public class User {
         return TreatementFiles.generateJSONFiles(listeFilesGoogle).toString();
     }
 
-    @Path("/ChildrensDropBox")
+    @Path("/ChildrenDropBox")
     @Produces(MediaType.TEXT_HTML)
     @GET
     public String getChildrensDropBox(@QueryParam("folderId") String folderNameParam ) throws IOException {
