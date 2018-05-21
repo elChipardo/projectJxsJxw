@@ -147,9 +147,10 @@ public class User {
         long totalAllocation = jsonInfos.getLong("quotaBytesTotal");
 
         double espaceRestant = (totalAllocation - usedSpace) * 9.31 * Math.pow(10, -10);
+        double newEspaceRestant = (double) Math.round(espaceRestant * 100) / 100;
 
 
-        return "<p>" + "espace restant : " + espaceRestant + "Go" + "</p>";
+        return  "Espace libre sur GoogleDrive : " + newEspaceRestant + " Go" + " sur 15 Go" ;
 
     }
 
@@ -174,9 +175,11 @@ public class User {
         int totalAllocation = jsonInfos.getJSONObject("allocation").getInt("allocated");
 
         double espaceRestant = (totalAllocation - usedSpace) * 9.31 * Math.pow(10, -10);
+        double newEspaceRestant = (double) Math.round(espaceRestant * 100) / 100;
 
 
-        return "<p>" + "espace restant : " + espaceRestant + "Go" + "</p>";
+
+        return  "Espace libre sur DropBox : " + newEspaceRestant + " Go" + " sur 2 Go" ;
     }
 
     @Path("/Files")
