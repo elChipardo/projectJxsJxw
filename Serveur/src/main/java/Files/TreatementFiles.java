@@ -8,21 +8,17 @@ import javax.json.JsonArray;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TreatementFiles {
 
-    static List<File> listeFiles;
-
-    public static void createliste(){
-
-        listeFiles = new ArrayList<>();
 
 
-    }
+    public static ArrayList<File> treatFilesGoogle(JSONObject files){
 
-    public static void treatFilesGoogle(JSONObject files){
+        ArrayList<File> listeFiles = new ArrayList<File>();
 
 
         JSONArray listfiles = files.getJSONArray("items");
@@ -37,8 +33,6 @@ public class TreatementFiles {
             String type = "file";
             // detection des dossiers
             if (listfiles.getJSONObject(i).getString("mimeType").equals("application/vnd.google-apps.folder")){
-                System.out.println("dossier " + name);
-                System.out.println("id : " +id);
                 type = "folder";
                 //foldersId.add(id);
             }
@@ -52,9 +46,12 @@ public class TreatementFiles {
 
         }
 
+        return listeFiles;
+
     }
 
-    public static void treatFilesDropBox(JSONObject files) {
+    public static List<File> treatFilesDropBox(JSONObject files) {
+        List<File> listeFiles = new ArrayList<File>();
 
         JSONArray listfiles = files.getJSONArray("entries");
 
@@ -75,9 +72,11 @@ public class TreatementFiles {
 
         }
 
+        return listeFiles;
+
     }
 
-    public static JSONObject generateJSONFiles(){
+    public static JSONObject generateJSONFiles(ArrayList<File> listeFiles){
 
         JSONObject json = new JSONObject();
 
@@ -103,7 +102,7 @@ public class TreatementFiles {
 
     }
 
-    public static String afficherFichiers(){
+    public static String afficherFichiers(ArrayList<File> listeFiles){
         String res="";
         for (int i=0; i<listeFiles.size();i++){
             res = res + listeFiles.get(i).toString() + "\n";

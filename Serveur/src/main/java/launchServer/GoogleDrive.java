@@ -34,7 +34,7 @@ public class GoogleDrive  {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public static String getFiles(String accessT) throws IOException {
+    public static void getFiles(String accessT) throws IOException {
 
 
     String url = "https://www.googleapis.com/drive/v2/files/";
@@ -44,11 +44,16 @@ public class GoogleDrive  {
     HashMap<String,String> properties = new HashMap<>();
     properties.put("Host", "www.googleapis.com");
     properties.put("Authorization", "Bearer " + accessT);
+    properties.put("orderBy", "folder");
+    properties.put("maxResults","1000");
 
-   // maximum fichiers String urlParameters = "maxResults=1000";
+        String urlParameters="";
+
+
+        // maximum fichiers String urlParameters = "maxResults=1000";
 
     // on execute la requête
-    String response = HttpRequest.Request.setRequest(url,"GET","", properties);
+    String response = HttpRequest.Request.setRequest(url,"GET",urlParameters, properties);
 
 
     try {
@@ -57,13 +62,6 @@ public class GoogleDrive  {
     catch ( Exception e){
         System.out.println(e);
     }
-
-
-    //print result
-
-    return TreatementFiles.generateJSONFiles().toString();
-
-
 
 }
 
