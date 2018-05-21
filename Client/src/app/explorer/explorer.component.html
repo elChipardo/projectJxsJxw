@@ -15,7 +15,7 @@
                     <li><a tabindex="-1" (click)="suppr()" >Supprimer</a></li>
                     <li><a tabindex="-1" (click)="renommer()">Renommer</a></li>
                      <li><a tabindex="-1" (click)="move()">Déplacer</a></li>
-                      <li><a tabindex="-1" >Ajouter</a></li>
+                      <li><a tabindex="-1" (click)="addFile()">Ajouter</a></li>
                     
                 </ul>
             </div>
@@ -62,9 +62,8 @@
 
         Liste des fichiers
       </h1>
-
           
-      <table width=100%>
+      <table width=100% cellspacing="0">
         <tr>
 
           <th></th>
@@ -80,18 +79,35 @@
 
 
 
-        <tr *ngFor="let fold of listFolder">
+        <tbody *ngFor="let fold of listFolder">
+        <tr>
           <input type="radio" name="parent" id={{fold.id}} />
-       <!--  <td *ngIf="isFile(fold.type) "> coucoub</td>
-       div *ngIf="true; bonjour"></div>-->
-          <td>{{fold.type}}</td>
+          <td>
+            <div *ngIf="isFile(fold.type);then content else other_content">here is ignored</div>
+            <ng-template #content><input type="button" value="Enfants" id={{fold.id}} (click)="askChildren(fold.id)" ></ng-template>
+            <ng-template #other_content>{{fold.type}}</ng-template>
+          </td>
+ 
           <td>{{fold.nom}}</td>
           <!--<td><img src="/images/icone-dossier.png" alt="Photo de montagne" /></td>-->
           <td>{{fold.plateforme}}</td>
           <td>{{fold.dateModif}}</td>
-          <br/>
+         
         </tr>
-
+        <div *ngIf="fold.id==idDossierParent;then contentbis else other_contentbis">here is ignored</div>
+         <ng-template #contentbis>
+        
+            <tr *ngFor="let child of listChildrenFiles">
+              <td>    <input type="radio" name="parent" id={{child.id}} /></td>
+              <td>=></td>
+              <td ><span class="marge">{{child.nom}}</span></td>
+              <td>{{child.plateforme}}</td>
+              <td>{{fold.dateModif}}</td>
+            </tr>
+          </ng-template>
+          <ng-template #other_contentbis> </ng-template>
+       
+     </tbody>
       </table>
 
 
@@ -100,14 +116,13 @@
 
     </article>
     <aside>
-      <h1>Espace libre :</h1>
+      <h2>Espace libre :</h2>
       <p>
         {{free}} <br>
       {{freebis}} <br>
 
     </p>
 
-  
 
     </aside>
 

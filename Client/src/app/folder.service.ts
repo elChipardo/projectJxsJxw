@@ -18,8 +18,10 @@ export class FolderService {
 			return this.http.get<any>(this.baseUrl+ "ServeurDrive/Files");
 	}
 
-	getFolderJSON(name: string): Observable<any> {
-		return this.http.get(this.baseUrl+"/"+name);
+
+	getFilesJSON(plat:string, id:string): Observable<any> {
+		console.log("http://localhost:8080/ServeurDrive/Children"+plat+"?folderId="+id);
+		return this.http.get<any>(this.baseUrl+"ServeurDrive/Children"+plat+"?folderId="+id);
 	}
 	getFreeSpace(plat: string): Observable<any>{
 		return this.http.get<any>(this.baseUrl+"ServeurDrive/Space"+plat);
@@ -31,9 +33,9 @@ export class FolderService {
 	//define url format
 	//data = folder or file
 	//create new data
-	postData(url: string, data){
-		let body = JSON.stringify(data);
-		return this.http.post(url+"/post", body);
+	postData(plat:string, chemin:string, extens:string, data){
+		//let body = JSON.stringify(data);
+		return this.http.post(this.baseUrl+"ServeurDrive/Upload"+plat+"?path="+chemin+"&extension="+extens, data);
 	}
 
 	//------- PUT DATA -------

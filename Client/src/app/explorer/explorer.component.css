@@ -15,7 +15,7 @@ article, aside
 }
 
 article {
-	width: 625px;
+	width: 70%;
 	margin-right: 15px
 }
 aside
@@ -36,4 +36,13 @@ aside
     left: 100%;
     margin-top: -1px;
 
+}
+.table{
+width:100%;
+min-width : 700px;
+height:15px;
+border-spacing: 0px;
+}
+.marge {
+margin-left: 5em;
 }
