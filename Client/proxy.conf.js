@@ -8,9 +8,12 @@ const PROXY_CONFIG = [
 			"ServeurDrive/Move",
 			"/ServeurDrive/Childrens",
 			"ServeurDrive/Upload",
+
       "ServeurDrive/UserExist",
-      "ServeurDrive/Connexion," +
-      "ServeurDrive/createAccount"
+      "ServeurDrive/Connexion",
+      "ServeurDrive/createAccount",
+			"ServeurDrive/DownloadGoogleDrive"
+
 
 		],
 		target : "http://localhost:8080",
