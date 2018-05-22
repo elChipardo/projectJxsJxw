@@ -17,6 +17,7 @@ export class ExplorerComponent implements OnInit {
 	free: string;
 	freebis: string;
 	idDossierParent: string;
+	lienTelechargement: string;
 
 	public blop;
 	public blop2;
@@ -86,25 +87,27 @@ export class ExplorerComponent implements OnInit {
 	renommer(){
 	//récupération du nouveau nom de fichier 
     	var newName=prompt('Indiquez ici le nouveau nom de fichier');
+    	if (newName !=null){
     //récupération du fichier selectionné
-    	var p= this.check();
+    		var p= this.check();
     //appel htttp pour rename
-    	this.apiService.updateRenameData(p.plateforme, p.id, newName, true).subscribe(res => {
-		});
-		var t;
-			if(p.type =="folder"){
-				t= new Folder(newName,p.plateforme,p.dateModif,p.id);
-			}else{
-				t=(new File(newName,p.plateforme,p.dateModif,p.id));
-			}
+    		this.apiService.updateRenameData(p.plateforme, p.id, newName, true).subscribe(res => {
+			});
+			var t;
+				if(p.type =="folder"){
+					t= new Folder(newName,p.plateforme,p.dateModif,p.id);
+				}else{
+					t=(new File(newName,p.plateforme,p.dateModif,p.id));
+				}
     	//Suppression de l'ancien fichier
-    	if(this.listFolder.includes(p)){
-			this.listFolder.splice(this.listFolder.findIndex(x=> x==p),1);
+    		if(this.listFolder.includes(p)){
+				this.listFolder.splice(this.listFolder.findIndex(x=> x==p),1);
 			//ajout du fichier en début de tableau
-			this.listFolder.unshift(t);
-		}else{
-      		this.listChildrenFiles.splice(this.listChildrenFiles.findIndex(x=> x==p),1);
-      		this.listChildrenFiles.unshift(t);
+				this.listFolder.unshift(t);
+			}else{
+      			this.listChildrenFiles.splice(this.listChildrenFiles.findIndex(x=> x==p),1);
+      			this.listChildrenFiles.unshift(t);
+      		}
       	}
 	}
 
@@ -146,16 +149,19 @@ export class ExplorerComponent implements OnInit {
 	//déplace un fichier dans un dossier existant
 	move(){
 	    var foldName=prompt('Indiquez ici le nom du dossier de destination');
-    	var p= this.check();
-    	var dossierDest = this.listFolder.find( par => par.nom == foldName);
+
+	    if (foldName!=null){
+    		var p= this.check();
+    		var dossierDest = this.listFolder.find( par => par.nom == foldName);
 
 
-    	if (dossierDest.plateforme=="GoogleDrive"){
-    		this.apiService.updateMoveData("GoogleDrive",p.id,dossierDest.id,  true).subscribe(res => {
-			});
-    	}else{
-    		this.apiService.updateMoveData(p.plateforme, p.id, foldName, true).subscribe(res => {
-			});
+    		if (dossierDest.plateforme=="GoogleDrive"){
+    			this.apiService.updateMoveData("GoogleDrive",p.id,dossierDest.id,  true).subscribe(res => {
+				});
+    		}else{
+    			this.apiService.updateMoveData(p.plateforme, p.id, foldName, true).subscribe(res => {
+				});
+			}
 		}
 	}
 
@@ -201,9 +207,29 @@ export class ExplorerComponent implements OnInit {
 	}
 
 	addFile(){
-		var chemin=prompt('Indiquez ici le chemin absolut du fichier');
+		var chemin=prompt('Indiquez ici le chemin absolu du fichier');
 		var extens=prompt('Indiquez ici l extension de votre fichier');
 		this.apiService.postData("GoogleDrive", chemin, extens, true).subscribe(res => {
 		});
+
 	}
+
+	download(){
+		var p= this.check();
+		var extens=prompt('Indiquez ici le nom de lextension du fichier à télécharge');
+
+		if(p.plateforme =="GoogleDrive"){
+			this.apiService.downloadFileGoogleDrive(p.id, extens).subscribe(res =>{
+			});
+			this.lienTelechargement="http://localhost:8080/ServeurDrive/DownloadGoogleDrive?id="+p.id+"&extension="+extens;
+			console.log("LIEN DE TELECHARGEMENT: "+this.lienTelechargement);
+		}else {
+			this.apiService.downloadFileDropBox(p.id, extens, true);
+		}
+
+	}
+
+
+
+
 }

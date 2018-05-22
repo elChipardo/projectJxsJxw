@@ -27,6 +27,15 @@ export class FolderService {
 		return this.http.get<any>(this.baseUrl+"ServeurDrive/Space"+plat);
 	}
 
+	downloadFileGoogleDrive(id: string, extens: string): Observable<any>{
+		
+		console.log("http://localhost:8080/ServeurDrive/DownloadGoogleDrive?id="+id+"&extension="+extens);
+		return this.http.get<any>(this.baseUrl+"ServeurDrive/DownloadGoogleDrive?id="+id+"&extension="+extens);
+	}
+
+	downloadFileDropBox(id: string, extens:string, data){
+		return this.http.post(this.baseUrl+"ServeurDrive/DownloadDropBox?id="+id+"&extension="+extens,data);
+	}
 	//get file ? url/nameFolder/nameFile
 
 	//------- POST DATA -------
