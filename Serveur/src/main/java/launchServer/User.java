@@ -573,11 +573,31 @@ public class User {
     @Path("/DownloadGoogleDrive")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public String downloadGoogleDrive() throws IOException {
+    public String downloadGoogleDrive(@QueryParam("id") String idParam, @QueryParam("extension") String typeParam) throws IOException {
 
-        String id = "1XtwwqV_SBdu2ygnnexq_yvn6vgdH72m1acJUs0MJlcY";
-        String url = "https://www.googleapis.com/drive/v2/files/1vAdG7ZFunBmwHLByV79W9gS8HC1KYGLdvTBMpc-KK0Y/export?mimeType=application/pdf";
 
+        //String id = "1XtwwqV_SBdu2ygnnexq_yvn6vgdH72m1acJUs0MJlcY";
+        String id = idParam;
+        String type = typeParam;
+        String finalContentType = "";
+        switch (typeParam) {
+            case "pdf":
+                finalContentType = "application/" + typeParam;
+                break;
+            case "doc":
+                finalContentType = "application/msword";
+                break;
+            case "ppt":
+                finalContentType = "application/ms-powerpoint";
+            case "xls":
+                finalContentType = "application/ms-excel";
+            case "csv":
+                finalContentType = "text/" + typeParam;
+                break;
+            default:
+                System.out.println("impossible");
+        }
+        String url = "https://www.googleapis.com/drive/v2/files/" + id + "/export?mimeType=" + finalContentType;
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         //properties.put("Content-Length", String.valueOf(fileToInsert.length()));
