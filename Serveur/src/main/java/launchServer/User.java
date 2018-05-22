@@ -211,14 +211,14 @@ public class User {
         ArrayList<Files.File> listeFilesGoogle = new ArrayList<Files.File>();
 
         if(! access_tokenGoogle.equals("")) {
-            GoogleDrive.getFiles(this.access_tokenGoogle);
-           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile));
+            GoogleDrive.getFiles(this.access_tokenGoogle, "root");
+           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile),  access_tokenGoogle);
 
         }
         ArrayList<Files.File> listeFilesDropBox = new ArrayList<Files.File>();
 
         if(!access_tokenDrop.equals("")) {
-            DropBox.getFiles(this.access_tokenDrop);
+            DropBox.getFiles(this.access_tokenDrop, "");
 
             listeFilesDropBox=TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
 
@@ -231,25 +231,41 @@ public class User {
 
     }
 
-    @Path("Childrens")
+    @Path("/ChildrenGoogleDrive")
     @Produces(MediaType.TEXT_HTML)
     @GET
     public String getChildrens(@QueryParam("folderId") String folderIdParam ) throws IOException {
 
-        String folderId=folderIdParam;
 
-        String url ="https://www.googleapis.com/drive/v2/files/"+folderId+"/children";
+        GoogleDrive.getFiles(this.access_tokenGoogle, folderIdParam);
 
-        //les propiétés
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("Host", "www.googleapis.com");
-        properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
+        ArrayList<Files.File> listeFilesGoogle= new ArrayList<Files.File>();
+        try {
+            listeFilesGoogle = TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile), access_tokenGoogle);
+        } catch (Exception e){
+            System.out.println(e);
+        }
 
-        // on execute la requête
-        String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
-
-        return "<p>" + response + "</p>";
+        return TreatementFiles.generateJSONFiles(listeFilesGoogle).toString();
     }
+
+    @Path("/ChildrenDropBox")
+    @Produces(MediaType.TEXT_HTML)
+    @GET
+    public String getChildrensDropBox(@QueryParam("folderId") String folderNameParam ) throws IOException {
+
+        ArrayList<Files.File> listeFilesChildrens = new ArrayList<Files.File>();
+
+
+        if (!access_tokenDrop.equals("")) {
+            DropBox.getFiles(this.access_tokenDrop, "/"+folderNameParam);
+
+            listeFilesChildrens = TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
+        }
+        return TreatementFiles.generateJSONFiles(listeFilesChildrens).toString();
+
+    }
+
 
     @Path("/DeleteGoogleDrive")
     // @GET //A changer en DELETE

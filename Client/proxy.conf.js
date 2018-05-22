@@ -5,7 +5,9 @@ const PROXY_CONFIG = [
 			"ServeurDrive/Files",
 			"ServeurDrive/SpaceGoogleDrive",
 			"ServeurDrive/SpaceDropBox",
-			"ServeurDrive/Move"
+			"ServeurDrive/Move",
+			"/ServeurDrive/Childrens",
+			"ServeurDrive/Upload"
 
 		],
 		target : "http://localhost:8080",

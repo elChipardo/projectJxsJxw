@@ -5,48 +5,58 @@ import org.json.JSONObject;
 
 
 import javax.json.JsonArray;
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TreatementFiles {
 
 
 
-    public static ArrayList<File> treatFilesGoogle(JSONObject files){
+    public static ArrayList<File> treatFilesGoogle(JSONObject files, String accessToken) throws IOException {
 
-        ArrayList<File> listeFiles = new ArrayList<File>();
+        ArrayList<Files.File> listeFiles = new ArrayList<File>();
+        ArrayList<Files.File> listeFolders = new ArrayList<File>();
 
+
+        System.out.println("coucou"+files);
+        System.out.println(files.getJSONArray("items"));
 
         JSONArray listfiles = files.getJSONArray("items");
-        System.out.println("taille :"+listfiles.length());
         for (int i=0; i< listfiles.length();i++){
+
+
             String id = listfiles.getJSONObject(i).getString("id");
+            String name;
+            String date;
+            String type="file";
 
-            String name = listfiles.getJSONObject(i).getString("title");
-            // fonctionne pas : String sharePerson = listfiles.getJSONObject(i).getJSONObject("sharingUser").getString("displayName");
-            String date = listfiles.getJSONObject(i).getString("modifiedDate");
+                 name = listfiles.getJSONObject(i).getString("title");
+                    System.out.println(name);
+                 date = listfiles.getJSONObject(i).getString("modifiedDate");
 
-            String type = "file";
-            // detection des dossiers
-            if (listfiles.getJSONObject(i).getString("mimeType").equals("application/vnd.google-apps.folder")){
-                type = "folder";
-                //foldersId.add(id);
+                 type = "file";
+                // detection des dossiers
+                if (listfiles.getJSONObject(i).getString("mimeType").equals("application/vnd.google-apps.folder")) {
+                    type = "folder";
+                    File newFile = new File(name,id, "GoogleDrive","",date, type);
+                    listeFolders.add(newFile);
+                    System.out.println("dossier " + id);
+                } else {
+                    File newFile = new File(name, id, "GoogleDrive", "", date, type);
+                    listeFiles.add(newFile);
+                }
+
             }
-            File newFile = new File(name,id, "GoogleDrive","",date, type);
 
-
-            listeFiles.add(newFile);
-
-
-
-
-        }
-
-        return listeFiles;
+        listeFolders.addAll(listeFiles);
+        System.out.println(afficherFichiers(listeFolders));
+        return listeFolders;
 
     }
 

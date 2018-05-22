@@ -38,7 +38,7 @@ public class DropBox {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public static void getFiles(String accessT) throws IOException {
+    public static void getFiles(String accessT, String path) throws IOException {
 
         String url = "https://api.dropboxapi.com/2/files/list_folder";
 
@@ -48,7 +48,7 @@ public class DropBox {
         properties.put("Authorization", "Bearer " + accessT);
 
         // les paramètres
-        String urlParameters ="{\"path\": \"\",\"recursive\": false,\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false,\"include_mounted_folders\": true}";
+        String urlParameters ="{\"path\": \""+path+"\",\"recursive\": false,\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false,\"include_mounted_folders\": true}";
 
         // on execute la requete
         String response = HttpRequest.Request.setRequest(url,"POST",urlParameters, properties);
