@@ -48,7 +48,7 @@ public class User {
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/DeleteGoogleDrive?fileId=1F7fCDzdje9D0sXo-E2vH1h6Af_KQdt1S1oVubUl0oro"+ ">" + "supprimer fichier"  +"</a>" + "<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/UploadDropBox" + ">" + "up fichier" + "</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/DownloadDropBox" + ">" + "down fichier" + "</a>" + "<br>"+
+                "<a href=http://localhost:8080/ServeurDrive/DownloadGoogleDrive" + ">" + "down fichier" + "</a>" + "<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/CopyDropBox" + ">" + "copy fichier" + "</a>" + "<br>";
 
     }
@@ -212,7 +212,7 @@ public class User {
 
         if(! access_tokenGoogle.equals("")) {
             GoogleDrive.getFiles(this.access_tokenGoogle, "root");
-           listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile),  access_tokenGoogle);
+            listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile),  access_tokenGoogle);
 
         }
         ArrayList<Files.File> listeFilesDropBox = new ArrayList<Files.File>();
@@ -517,7 +517,7 @@ public class User {
             default:
                 System.out.println("impossible");
         }
-       // File fileToInsert = new File("/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/triso.JPG");
+        // File fileToInsert = new File("/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/triso.JPG");
         File fileToInsert = new File(pathParam);
         FileInputStream fileInputStream = new FileInputStream(fileToInsert);
         //les propiétés
@@ -529,7 +529,7 @@ public class User {
 
         // on execute la requête
         //String response = HttpRequest.RequestUpdate.setRequestUpload(url, "POST", "", properties, fileToInsert);
-       // String response = HttpRequest.Request.setRequest(url, "POST", "{ \"title\" : \"" +  fileToInsert.getName() + "\" }", properties);
+        // String response = HttpRequest.Request.setRequest(url, "POST", "{ \"title\" : \"" +  fileToInsert.getName() + "\" }", properties);
         String response = HttpRequest.Request.setRequestUpload(url, "POST", "" , properties, fileInputStream);
         System.out.println(response);
 
@@ -545,7 +545,7 @@ public class User {
 
         String url = "https://content.dropboxapi.com/2/files/upload";
         File fileToInsert = new File("/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/project.pdf");
-      //  File fileToInsert = new File(pathParam);
+        //  File fileToInsert = new File(pathParam);
         FileInputStream fileInputStream = new FileInputStream(fileToInsert);
 
         String urlParameters = "{\"path\": \"/project.pdf\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}";
@@ -573,41 +573,19 @@ public class User {
     @Path("/DownloadGoogleDrive")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public String downloadGoogleDrive(@QueryParam("id") String idParam, @QueryParam("extension") String typeParam) throws IOException {
+    public String downloadGoogleDrive() throws IOException {
 
-        //String id = "1XtwwqV_SBdu2ygnnexq_yvn6vgdH72m1acJUs0MJlcY";
-        String id = idParam;
-        String type = typeParam;
-        String finalContentType = "";
-        switch (typeParam) {
-            case "pdf":
-                finalContentType = "application/" + typeParam;
-                break;
-            case "doc":
-                finalContentType = "application/msword";
-                break;
-            case "ppt":
-                finalContentType = "application/ms-powerpoint";
-                break;
-            case "xls":
-                finalContentType = "application/ms-excel";
-                break;
-            case "csv":
-                finalContentType = "text/" + typeParam;
-                break;
-            default:
-                System.out.println("impossible");
-        }
-        String url = "https://www.googleapis.com/drive/v2/files/"+ id +"/export?mimeType="+finalContentType;
+        String id = "1XtwwqV_SBdu2ygnnexq_yvn6vgdH72m1acJUs0MJlcY";
+        String url = "https://www.googleapis.com/drive/v2/files/1vAdG7ZFunBmwHLByV79W9gS8HC1KYGLdvTBMpc-KK0Y/export?mimeType=application/pdf";
 
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         //properties.put("Content-Length", String.valueOf(fileToInsert.length()));
         properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
 
-
-
         // on execute la requête
+        //String response = HttpRequest.RequestUpdate.setRequestUpload(url, "POST", "", properties, fileToInsert);
+        // String response = HttpRequest.Request.setRequest(url, "POST", "{ \"title\" : \"" +  fileToInsert.getName() + "\" }", properties);
         String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
         System.out.println(response);
 
