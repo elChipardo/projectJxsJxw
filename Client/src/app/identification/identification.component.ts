@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FolderService} from '../folder.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,7 +9,13 @@ import { Router } from '@angular/router';
 })
 export class IdentificationComponent implements OnInit {
 
-	constructor(private router: Router) { }
+	apiService: FolderService;
+	email: string = "";
+	password: string = "";
+	
+	constructor(serviceFolder : FolderService){
+		this.apiService = serviceFolder;
+	}
 
 	ngOnInit() {
 	}

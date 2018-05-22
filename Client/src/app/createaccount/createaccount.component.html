@@ -2,7 +2,7 @@
 
 	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
 		<h5 class="my-0 mr-md-auto font-weight-normal">L'API NE FAIT PAS LE MOINE</h5>
-		<a class="btn btn-outline-primary" routerLink="/" >Home</a>
+		<a class="btn btn-outline-primary" routerLink="/">Home</a>
 	</div>
 
 	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
@@ -10,10 +10,26 @@
 		<p class="lead">Sign in one and we will connect you automatically at your drive ! </p>
 	</div>
 
+
 	<div class="container">
+
+		<div class="row" style="padding-bottom: 30px">
+			<div class="col-md-4" style="text-align: center">
+				<h3>Your surname :</h3><label for="inputEmail" class="sr-only">Surname</label>
+				<input type="email" class="form-control" placeholder="Surname" required autofocus [(ngModel)]="email">
+			</div>
+			<div class="col-md-4" style="text-align: center">
+				<h3> Your password : </h3><label for="inputPassword" class="sr-only">Password</label>
+				<input type="password" class="form-control" placeholder="Password" required [(ngModel)]="password">
+			</div>
+			<div class="col-md-4" style="text-align: center; align-self-center">
+				<a href="http://localhost:8080/ServeurDrive/createAccount?mail={{email}}&password={{password}}"><button type="button" class="btn btn-lg btn-block btn-primary">Create account</button></a>
+			</div>
+		</div>
+
 		<div class="card-deck mb-3 text-center">
 			<div class="card mb-4 box-shadow">
-				<div class="card-header">
+				<div class="card-header">>
 					<img src="../../assets/GoogleDriveIcon.png" width="20%">
 				</div>
 				<div class="card-body">
@@ -30,7 +46,7 @@
 				</div>
 				<div class="card-body">
 					<h4 class="my-0 font-weight-normal">Dropbox</h4>
-					<br>					
+					<br>
 					<a href="http://localhost:8080/ServeurDrive/OauthDropBox">
 						<button type="button" class="btn btn-lg btn-block btn-primary" >Connect</button>
 					</a>
@@ -47,7 +63,7 @@
 				</div>
 			</div>
 		</div>
-		  <button type="button" class="btn btn-lg btn-block btn-primary" routerLink="/explorer">Sign up for free</button>
+		<button type="button" class="btn btn-lg btn-block btn-primary" routerLink="/explorer">Sign up for free</button>
 	</div>
 
 

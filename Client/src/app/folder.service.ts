@@ -24,7 +24,7 @@ export class FolderService {
 		return this.http.get<any>(this.baseUrl+"ServeurDrive/Children"+plat+"?folderId="+id);
 	}
 	getFreeSpace(plat: string): Observable<any>{
-		return this.http.get<any>(this.baseUrl+"ServeurDrive/Space"+plat);
+		return this.http.get<any>(	this.baseUrl+"ServeurDrive/Space"+plat);
 	}
 
 	//get file ? url/nameFolder/nameFile

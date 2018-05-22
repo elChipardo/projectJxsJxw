@@ -1,5 +1,6 @@
 package launchServer;
 
+import DataBase.Connexion;
 import Files.TreatementFiles;
 import HttpRequest.Request;
 import org.json.JSONObject;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,9 +38,14 @@ public class User {
     private static String AppKey = "84imrzb8n7lobyz";
     private static String AppSecret = "t7kt83ir955vgju";
     private static String clientID = "1052251515610-a6n80d93kvrffileji09br2ksbnvdoj3.apps.googleusercontent.com";
+    private static String clientSecret = "mPeJJscfiXdNGN9jma3croXB";
 
+    public static void setUser(String tokenGoogle, String tokenDropBox){
 
-    String clientSecret = "mPeJJscfiXdNGN9jma3croXB";
+        access_tokenGoogle=tokenGoogle;
+        access_tokenDrop=tokenDropBox;
+    }
+
 
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -63,7 +70,7 @@ public class User {
 
     @Path("/ResponseGoogleDrive")
     @GET //A changer en POST
-    public Response getResponseGoogle(@QueryParam("code") String codeURL) throws URISyntaxException, IOException {
+    public Response getResponseGoogle(@QueryParam("code") String codeURL) throws URISyntaxException, IOException, SQLException, ClassNotFoundException {
 
         codeGoogle = codeURL;
 
@@ -83,6 +90,8 @@ public class User {
 
         JSONObject myResponse = new JSONObject(response.toString());
         this.access_tokenGoogle = myResponse.getString("access_token");
+
+        Connexion.insertTokenGoogle(Connexion.mailcourant,this.access_tokenGoogle);
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
@@ -104,7 +113,7 @@ public class User {
 
     @Path("/ResponseDropBox")
     @GET
-    public Response getResponseDrop(@QueryParam("code") String codeURL) throws URISyntaxException, IOException {
+    public Response getResponseDrop(@QueryParam("code") String codeURL) throws URISyntaxException, IOException, SQLException, ClassNotFoundException {
 
         // le code récupéré dans l'url
         codeDropBox = codeURL;
@@ -126,6 +135,8 @@ public class User {
         JSONObject myResponse = new JSONObject(response.toString());
         // on recupere et on stocke l'access token
         this.access_tokenDrop = myResponse.getString("access_token");
+
+        Connexion.insertTokenDropBox(Connexion.mailcourant,this.access_tokenDrop);
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
         java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
@@ -205,17 +216,20 @@ public class User {
     @GET
     public String getAllFiles() throws IOException {
 
+
         ArrayList<Files.File> listeFilesGoogle = new ArrayList<Files.File>();
 
         if(! access_tokenGoogle.equals("")) {
-            GoogleDrive.getFiles(this.access_tokenGoogle, "root");
+            System.out.println(access_tokenGoogle);
+
+            GoogleDrive.getFiles(access_tokenGoogle, "root");
            listeFilesGoogle= TreatementFiles.treatFilesGoogle(new JSONObject(Request.requestFile),  access_tokenGoogle);
 
         }
         ArrayList<Files.File> listeFilesDropBox = new ArrayList<Files.File>();
 
         if(!access_tokenDrop.equals("")) {
-            DropBox.getFiles(this.access_tokenDrop, "");
+            DropBox.getFiles(access_tokenDrop, "");
 
             listeFilesDropBox=TreatementFiles.treatFilesDropBox(new JSONObject(Request.requestFile));
 

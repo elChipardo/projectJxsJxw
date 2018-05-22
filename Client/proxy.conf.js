@@ -7,7 +7,10 @@ const PROXY_CONFIG = [
 			"ServeurDrive/SpaceDropBox",
 			"ServeurDrive/Move",
 			"/ServeurDrive/Childrens",
-			"ServeurDrive/Upload"
+			"ServeurDrive/Upload",
+      "ServeurDrive/UserExist",
+      "ServeurDrive/Connexion," +
+      "ServeurDrive/createAccount"
 
 		],
 		target : "http://localhost:8080",

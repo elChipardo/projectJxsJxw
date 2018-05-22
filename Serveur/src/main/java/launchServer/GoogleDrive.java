@@ -35,6 +35,7 @@ public class GoogleDrive  {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public static void getFiles(String accessT, String path) throws IOException {
+        System.out.println("test"+accessT );
 
         String url ="https://www.googleapis.com/drive/v2/files?q=%27"+path+"%27%20in%20parents";
 
@@ -44,8 +45,11 @@ public class GoogleDrive  {
         properties.put("Authorization", "Bearer " + accessT);
 
         // on execute la requête
-        String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
-
+        try {
+            String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
+        } catch (Exception e){
+            System.out.println(e);
+        }
 
 
 }

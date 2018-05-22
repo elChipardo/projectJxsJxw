@@ -7,7 +7,7 @@ import { ExplorerComponent } from './explorer/explorer.component';
 import { CreateaccountComponent } from './createaccount/createaccount.component';
 import { FolderService } from './folder.service';
 import { HttpClientModule } from '@angular/common/http';
-
+import { FormsModule } from '@angular/forms';
 
 const appRoutes: Routes = [
   { path : '', component : IdentificationComponent},
@@ -29,7 +29,8 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: false } // <-- debugging purposes only
     ),
-      HttpClientModule
+      HttpClientModule,
+      FormsModule
   ],
   providers: [FolderService],
   bootstrap: [AppComponent]

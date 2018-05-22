@@ -19,43 +19,45 @@ public class TreatementFiles {
 
 
     public static ArrayList<File> treatFilesGoogle(JSONObject files, String accessToken) throws IOException {
-
         ArrayList<Files.File> listeFiles = new ArrayList<File>();
         ArrayList<Files.File> listeFolders = new ArrayList<File>();
-
-
-        System.out.println("coucou"+files);
-        System.out.println(files.getJSONArray("items"));
+        System.out.println(files);
 
         JSONArray listfiles = files.getJSONArray("items");
         for (int i=0; i< listfiles.length();i++){
 
 
             String id = listfiles.getJSONObject(i).getString("id");
-            String name;
-            String date;
+
             String type="file";
 
-                 name = listfiles.getJSONObject(i).getString("title");
-                    System.out.println(name);
-                 date = listfiles.getJSONObject(i).getString("modifiedDate");
+            String name = listfiles.getJSONObject(i).getString("title");
+            String date = listfiles.getJSONObject(i).getString("modifiedDate");
+            long size=0;
 
-                 type = "file";
+            type = "file";
                 // detection des dossiers
                 if (listfiles.getJSONObject(i).getString("mimeType").equals("application/vnd.google-apps.folder")) {
                     type = "folder";
-                    File newFile = new File(name,id, "GoogleDrive","",date, type);
+                    File newFile = new File(name,id, "GoogleDrive","",date, type, size);
                     listeFolders.add(newFile);
                     System.out.println("dossier " + id);
                 } else {
-                    File newFile = new File(name, id, "GoogleDrive", "", date, type);
+
+                    try {
+                      //  size = listfiles.getJSONObject(i).getLong("fileSize");
+                        // String sharePerson = listfiles.getJSONObject(i).getString("sharingUser").getString("displayName"); //.getString("displayName");
+
+                    } catch (Exception e){
+                        System.out.println(e);
+                    }
+                    File newFile = new File(name, id, "GoogleDrive", "", date, type, size);
                     listeFiles.add(newFile);
                 }
 
             }
 
         listeFolders.addAll(listeFiles);
-        System.out.println(afficherFichiers(listeFolders));
         return listeFolders;
 
     }
@@ -74,7 +76,7 @@ public class TreatementFiles {
             // fonctionne pas : String sharePerson = listfiles.getJSONObject(i).getJSONObject("sharingUser").getString("displayName");
 
 
-
+            long size=0;
             String type = listfiles.getJSONObject(i).getString(".tag");
             String date="";
             if(type.equals("file")){
@@ -82,7 +84,7 @@ public class TreatementFiles {
                 System.out.println(date);
 
             }
-            File newFile = new File(name, id, "DropBox", "", date, type);
+            File newFile = new File(name, id, "DropBox", "", date, type, size);
 
 
             listeFiles.add(newFile);

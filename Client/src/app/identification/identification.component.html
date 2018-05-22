@@ -1,17 +1,28 @@
-		<body class="text-center container" style="width: 20%; padding-top: 10%">
-	<form class="form-signin">
-		
-		<!--> logo du groupe</-->
-		<img class="mb-4" src="../../assets/BeApi.jpg" alt="" width="72" height="72">
-		
-		<!--> titre </-->
-		<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-		
-		<!--> se logger et changer de page</--> 
-		<button class="btn btn-lg btn-primary btn-block"  type="submit" routerLink="/createaccount" routerLinkActive="active"> Create new account</button>
-		<button class="btn btn-lg btn-primary btn-block" type="submit" routerLink="/explorer" routerLinkActive="active">Sign in</button>
-		
-		<p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
-	</form>
-	
-	</body>
+<body class="text-center container" style="width: 20%; padding-top: 10%">
+	<!-->logo du groupe</-->
+	<img class="mb-4" src="../../assets/BeApi.jpg" alt="" width="72" height="72">
+
+	<!-->titre </-->
+	<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+	<label for="inputEmail" class="sr-only">Email address</label>
+	<input type="email" class="form-control" placeholder="Email address" required autofocus [(ngModel)]="email">
+	<label for="inputPassword" class="sr-only">Password</label>
+	<input type="password" class="form-control" placeholder="Password" required [(ngModel)]="password">
+
+	<!-->se souvenir de l'utilisateur </-->
+	<div class="checkbox mb-3">
+		<label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+	</div>
+
+	<!-->se logger et changer de page</-->
+	<button class="btn btn-lg btn-primary btn-block" type="submit" routerLink="/createaccount" routerLinkActive="active"> Create new account</button>
+	<a href="http://localhost:8080/ServeurDrive/UserExist?mail={{email}}&password={{password}}"><button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
+
+
+	</a>
+	<p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+
+</body>
