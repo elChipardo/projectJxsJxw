@@ -1,9 +1,9 @@
-<!--The content below is only a placeholder and can be replaced.-->   
+<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
 
   <header>
      <div class="row">
-        <div class="container col-lg-2 align-self-center">                                                                 
+        <div class="container col-lg-2 align-self-center">
            <div class="dropdown">
                 <button class="btn btn-default" type="button" data-toggle="dropdown">Options
                 <span class="caret"></span></button>
@@ -36,21 +36,20 @@
         </div>
 
         <div class="col-lg-2 align-self-center">
-          <a class="btn btn-outline-primary" routerLink="/" >Home</a> 
-
-          <a class="btn btn-outline-primary" routerLink="/createaccount" >log plateforme </a>    
+          <a class="btn btn-outline-primary" routerLink="/" >Home</a>
+          <a class="btn btn-outline-primary" routerLink="/createaccount" >log plateforme </a>
 
         </div>
      </div>
     </header>
-  
+
     <div id="image_file"></div>
-  
+
 
     <section>
       <article>
         <h1>Liste des fichiers</h1>
-          
+
         <table width=100% cellspacing="0">
           <tr>
 
@@ -62,7 +61,7 @@
             <th>    </th>
 
           </tr>
-        
+
         <tbody *ngFor="let fold of listFolder">
           <tr>
             <input type="radio" name="parent" id={{fold.id}} />
@@ -71,15 +70,15 @@
               <ng-template #content><input type="button" value="Enfants" id={{fold.id}} (click)="askChildren(fold.id)" ></ng-template>
               <ng-template #other_content>{{fold.type}}</ng-template>
             </td>
- 
+
             <td>{{fold.nom}}</td>
             <td>{{fold.plateforme}}</td>
             <td>{{fold.dateModif}}</td>
-         
+
           </tr>
           <div *ngIf="fold.id==idDossierParent;then contentbis else other_contentbis">here is ignored</div>
           <ng-template #contentbis>
-        
+
             <tr *ngFor="let child of listChildrenFiles">
               <td>    <input type="radio" name="parent" id={{child.id}} /></td>
               <td>=></td>
@@ -89,7 +88,7 @@
             </tr>
           </ng-template>
           <ng-template #other_contentbis> </ng-template>
-       
+
         </tbody>
       </table>
     </article>

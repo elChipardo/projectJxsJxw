@@ -24,7 +24,7 @@ export class ExplorerComponent implements OnInit {
 	public blop3;
 	public blop4;
 	public blop5;
-	
+
 	constructor(serviceFolder : FolderService){
 		this.apiService = serviceFolder;
 		this.free="";
@@ -37,10 +37,10 @@ export class ExplorerComponent implements OnInit {
    			var rootFolder = new Array<Parent>();
    			this.blop=res.items;
 
-   		//parcours du JSON reçu pour créer un tableu de fichiers et dossiers 
+   		//parcours du JSON reçu pour créer un tableu de fichiers et dossiers
 			for(let file in this.blop){
 				if(this.blop[file].type =="folder"){
-					rootFolder.push(new Folder(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif.slice(0, 10),this.blop[file].id));
+					rootFolder.unshift(new Folder(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif.slice(0, 10),this.blop[file].id));
 				}else{
 					rootFolder.push(new File(this.blop[file].title,this.blop[file].plateforme,this.blop[file].dateModif.slice(0, 10),this.blop[file].id));
 				}
@@ -48,7 +48,7 @@ export class ExplorerComponent implements OnInit {
 			this.listFolder=rootFolder;
 		});
 
-   	//Récupération de l'espace libre sur les drives 
+   	//Récupération de l'espace libre sur les drives
   		this.apiService.getFreeSpace("GoogleDrive").subscribe(res => {
 			this.blop2=res;
 			this.free="Sur GoogleDrive : "+this.blop2.espaceLibreGoogleDrive+"/"+this.blop2.espaceTotalGoogleDrive+"gB";
@@ -64,28 +64,28 @@ export class ExplorerComponent implements OnInit {
 	//lors de la demande de supppression d'un fichier
 	suppr(){
 		console.log('on supprime')
-		if (confirm("êtes vous sur de vouloir supprimer le fichier")) { 
+		if (confirm("êtes vous sur de vouloir supprimer le fichier")) {
        		var p= this.check();
        		console.log(p);
  			this.apiService.deleteData(p.plateforme,p.id).subscribe(res => {
 			});
-      		
+
       		//suppresion du fichier dans la liste des fichiers
       		if(this.listFolder.includes(p)){
       			this.listFolder.splice(this.listFolder.findIndex(x=> x==p),1);
       		}else{
       			this.listChildrenFiles.splice(this.listChildrenFiles.findIndex(x=> x==p),1);
       		}
-			
+
     	}else{
         	alert("vous n'êtes pas d'accord")
-        //ne rien faire 
-   		 }	
+        //ne rien faire
+   		 }
 	}
 
 	//pour renommer un fichier
 	renommer(){
-	//récupération du nouveau nom de fichier 
+	//récupération du nouveau nom de fichier
     	var newName=prompt('Indiquez ici le nouveau nom de fichier');
     	if (newName !=null){
     //récupération du fichier selectionné
@@ -114,7 +114,7 @@ export class ExplorerComponent implements OnInit {
 
 	//vérifie le type du parent
 	 isFile(m : string): boolean{
-	 	
+
 		if(m =="dossier"){
 			return true;
 		}else{
@@ -122,14 +122,14 @@ export class ExplorerComponent implements OnInit {
 		}
 	}
 
-	// recherche le parent qui a été coché 
+	// recherche le parent qui a été coché
 	check():Parent {
 		var inputs = document.getElementsByTagName('input');
 		var inputsLength = inputs.length;
 		for (var i = 0 ; i < inputsLength ; i++) {
 			if (inputs[i].type == 'radio' && inputs[i].checked) {
 				for (var b=0; b<this.listFolder.length; b++){
-					
+
 					if(inputs[i].id==this.listFolder[b].id){
 						console.log(this.listFolder[b].nom)
 						return this.listFolder[b];
@@ -144,7 +144,7 @@ export class ExplorerComponent implements OnInit {
 			}
 		}
 	}
-	
+
 
 	//déplace un fichier dans un dossier existant
 	move(){
@@ -169,7 +169,7 @@ export class ExplorerComponent implements OnInit {
 	askChildren(id:string){
 		this.idDossierParent=id;
 		var dossierDest = this.listFolder.find( par => par.id == this.idDossierParent);
-	
+
  		if (dossierDest.plateforme=="GoogleDrive"){
  			console.log("coucou")
     	 	this.apiService.getFilesJSON(dossierDest.plateforme, dossierDest.id).subscribe(res => {
@@ -185,7 +185,7 @@ export class ExplorerComponent implements OnInit {
 					}
 				}
 				this.listChildrenFiles=rootFolder;
-	
+
     			console.log("les enfants"+this.listChildrenFiles);
 			});
     	}else{
