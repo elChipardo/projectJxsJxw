@@ -88,8 +88,8 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        //java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
+        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        //java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -130,8 +130,8 @@ public class User {
         this.access_tokenDrop = myResponse.getString("access_token");
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        //java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
-        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
+        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        //java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
