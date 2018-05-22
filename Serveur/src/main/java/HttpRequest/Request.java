@@ -93,10 +93,12 @@ public class Request {
 
         }
 
+        con.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+
         if(!urlParameters.isEmpty()){
             // Send post request
-            con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+
             wr.writeBytes(urlParameters);
             wr.writeBytes("\r\n");
         }
@@ -105,9 +107,6 @@ public class Request {
         int bytesAvailable = file.available();
         int bufferSize = Math.min(bytesAvailable, maxBufferSize);
         byte[] buffer = new byte[bufferSize];
-
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 
         int bytesRead = file.read(buffer, 0, bufferSize);
         while(bytesRead > 0) {
