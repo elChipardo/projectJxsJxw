@@ -48,8 +48,8 @@ public class User {
                 "<a href=http://localhost:8080/ServeurDrive/Files" + ">" + "recupérer les fichiers en JSON"  +"</a>" + "<br>" +
                 "<a href=http://localhost:8080/ServeurDrive/DeleteGoogleDrive?fileId=1F7fCDzdje9D0sXo-E2vH1h6Af_KQdt1S1oVubUl0oro"+ ">" + "supprimer fichier"  +"</a>" + "<br>"+
                 "<a href=http://localhost:8080/ServeurDrive/UploadDropBox" + ">" + "up fichier" + "</a>" + "<br>" +
-                "<a href=http://localhost:8080/ServeurDrive/DownloadGoogleDrive" + ">" + "down fichier" + "</a>" + "<br>"+
-                "<a href=http://localhost:8080/ServeurDrive/CopyGoogleDrive" + ">" + "copy fichier" + "</a>" + "<br>";
+                "<a href=http://localhost:8080/ServeurDrive/DownloadDropBox" + ">" + "down fichier" + "</a>" + "<br>"+
+                "<a href=http://localhost:8080/ServeurDrive/CopyDropBox" + ">" + "copy fichier" + "</a>" + "<br>";
 
     }
 
@@ -88,8 +88,8 @@ public class User {
 
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
-        //java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
+        //java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -130,8 +130,8 @@ public class User {
         this.access_tokenDrop = myResponse.getString("access_token");
 
         // redirection vers le path Files pour executer la requete GET et ainsi recuperer la liste des fichiers
-        java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
-        //java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
+        //java.net.URI location = new java.net.URI("http://localhost:4200/explorer");
+        java.net.URI location = new java.net.URI("http://localhost:8080/ServeurDrive/");
         return Response.temporaryRedirect(location).build();
 
     }
@@ -548,7 +548,7 @@ public class User {
       //  File fileToInsert = new File(pathParam);
         FileInputStream fileInputStream = new FileInputStream(fileToInsert);
 
-        String urlParameters = "{\"path\": \"/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/project.pdf\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}";
+        String urlParameters = "{\"path\": \"/project.pdf\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}";
 
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
@@ -562,7 +562,7 @@ public class User {
         // on execute la requête
         //String response = HttpRequest.RequestUpdate.setRequestUpload(url, "POST", "", properties, fileToInsert);
         // String response = HttpRequest.Request.setRequest(url, "POST", "{ \"title\" : \"" +  fileToInsert.getName() + "\" }", properties);
-        String response = HttpRequest.Request.setRequest(url, "POST", "{\"path\": \"/home/hcnn/Documents/ESIR/ESIR2/S8/JXS/tp/project/project.pdf\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}", properties);
+        String response = HttpRequest.Request.setRequestUpload(url, "POST", "{\"path\": \"/project.pdf\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}", properties, fileInputStream);
         System.out.println(response);
 
         return "<p>" + response + "</p>";
@@ -579,7 +579,7 @@ public class User {
         String id = idParam;
         String type = typeParam;
         String finalContentType = "";
-        switch (typeParam){
+        switch (typeParam) {
             case "pdf":
                 finalContentType = "application/" + typeParam;
                 break;
@@ -588,13 +588,16 @@ public class User {
                 break;
             case "ppt":
                 finalContentType = "application/ms-powerpoint";
+                break;
             case "xls":
                 finalContentType = "application/ms-excel";
+                break;
             case "csv":
                 finalContentType = "text/" + typeParam;
                 break;
             default:
                 System.out.println("impossible");
+        }
         String url = "https://www.googleapis.com/drive/v2/files/"+ id +"/export?mimeType="+finalContentType;
 
         //les propiétés
@@ -605,9 +608,55 @@ public class User {
 
 
         // on execute la requête
-        //String response = HttpRequest.RequestUpdate.setRequestUpload(url, "POST", "", properties, fileToInsert);
-        // String response = HttpRequest.Request.setRequest(url, "POST", "{ \"title\" : \"" +  fileToInsert.getName() + "\" }", properties);
         String response = HttpRequest.Request.setRequest(url, "GET", "", properties);
+        System.out.println(response);
+
+        return "<p>" + response + "</p>";
+
+    }
+
+    //A tester
+    @Path("/DownloadDropBox")
+    @Produces(MediaType.TEXT_HTML)
+    public String downloadDropBox(@QueryParam("id") String idParam, @QueryParam("extension") String typeParam) throws IOException {
+
+        //String id = "1XtwwqV_SBdu2ygnnexq_yvn6vgdH72m1acJUs0MJlcY";
+        String id = idParam;
+        String type = typeParam;
+        String finalContentType = "";
+        switch (typeParam) {
+            case "pdf":
+                finalContentType = "application/" + typeParam;
+                break;
+            case "doc":
+                finalContentType = "application/msword";
+                break;
+            case "ppt":
+                finalContentType = "application/ms-powerpoint";
+                break;
+            case "xls":
+                finalContentType = "application/ms-excel";
+                break;
+            case "csv":
+                finalContentType = "text/" + typeParam;
+                break;
+            default:
+                System.out.println("impossible");
+        }
+        String url = "https://content.dropboxapi.com/2/files/download";
+
+        String urlParameters = "{\"path\": \"/project.pdf\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}";
+
+        //les propiétés
+        HashMap<String, String> properties = new HashMap<>();
+        //properties.put("Content-Length", String.valueOf(fileToInsert.length()));
+        properties.put("Authorization", "Bearer " + this.access_tokenDrop);
+        properties.put("Dropbox-API-Arg", urlParameters);
+
+
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
         System.out.println(response);
 
         return "<p>" + response + "</p>";
@@ -616,22 +665,63 @@ public class User {
 
     @Path("/CopyGoogleDrive")
     @Produces(MediaType.TEXT_HTML)
-    public String copyGoogleDrive() throws IOException {
+    public String copyGoogleDrive(@QueryParam("id") String idParam, @QueryParam("title") String titleParam) throws IOException {
 
-        String id = "1XtwwqV_SBdu2ygnnexq_yvn6vgdH72m1acJUs0MJlcY";
-        String url = "https://www.googleapis.com/drive/v2/files/1XtwwqV_SBdu2ygnnexq_yvn6vgdH72m1acJUs0MJlcY/copy";
+        String title = titleParam;
+        String id = idParam;
+        String url = "https://www.googleapis.com/drive/v2/files/"+ id + "/copy";
 
         //les propiétés
         HashMap<String, String> properties = new HashMap<>();
         properties.put("Authorization", "Bearer " + this.access_tokenGoogle);
-        properties.put("downloadType", "application/pdf");
+        properties.put("Content-Type", "application/json");
 
 
         // on execute la requête
         //String response = HttpRequest.RequestUpdate.setRequestUpload(url, "POST", "", properties, fileToInsert);
         // String response = HttpRequest.Request.setRequest(url, "POST", "{ \"title\" : \"" +  fileToInsert.getName() + "\" }", properties);
-        String response = HttpRequest.Request.setRequest(url, "POST", "", properties);
+        String response = HttpRequest.Request.setRequest(url, "POST", "{ \"title\" : \"" + title + "\" }", properties);
         System.out.println(response);
+
+        return "<p>" + response + "</p>";
+
+    }
+
+    //a tester
+    @Path("/CopyDropBox")
+    @Produces(MediaType.TEXT_HTML)
+    public String copyDropBox(@QueryParam("fileId") String fileIdParam, @QueryParam("path") String newPathParam) throws IOException {
+
+        String fileId = fileIdParam;
+        String url = "https://api.dropboxapi.com/2/files/copy_v2";
+        String newPath  = newPathParam;
+
+        // requete annexe qui recupere le chemin du fichier
+        String urlRequeteannexe = "https://api.dropboxapi.com/2/files/get_metadata";
+
+        HashMap<String, String> propertiesRequeteAnnexe = new HashMap<>();
+        propertiesRequeteAnnexe.put("Content-Type", "application/json");
+        propertiesRequeteAnnexe.put("Authorization", "Bearer " + this.access_tokenDrop);
+
+        String urlParametersrequeteAnnexe = "{\"path\": \"" + fileId + "\",\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false}";
+
+        String responseRequeteannexe = HttpRequest.Request.setRequest(urlRequeteannexe, "POST", urlParametersrequeteAnnexe, propertiesRequeteAnnexe);
+
+        JSONObject jsonRequeteAnnexe = new JSONObject(Request.requestFile);
+
+        String path = jsonRequeteAnnexe.getString("path_lower");
+        String nameFile = jsonRequeteAnnexe.getString("name");
+
+        // fin requete annexe
+
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("Authorization", "Bearer " + this.access_tokenDrop);
+        properties.put("Content-Type", "application/json");
+
+        String urlParameters = "{\"from_path\": \"" + path + "\",\"to_path\": \"/" + newPath +"/" + nameFile + "\",\"allow_shared_folder\": false,\"autorename\": false,\"allow_ownership_transfer\": false}";
+
+        // on execute la requête
+        String response = HttpRequest.Request.setRequest(url, "POST", urlParameters, properties);
 
         return "<p>" + response + "</p>";
 
